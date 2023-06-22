@@ -1,0 +1,50 @@
+const data = {
+  products: [
+    {
+      title: "The Power Of Pivotin",
+      auther: "Monica Ortega",
+      image: "/images/The Power of Pivotin.jpg",
+      price: 20,
+      countInStock: 7,
+      genre: "Drama",
+      rating: 4.5,
+      numReviews: 10,
+      description: "How To Embrace Change And Create A Life You Love",
+    },
+    {
+      title: "The Psychology Of Money",
+      auther: "Morgan Housel",
+      image: "/images/The Psychology Of Money.jpg",
+      price: 10,
+      countInStock: 22,
+      genre: "Drama",
+      rating: 4.0,
+      numReviews: 10,
+      description: "Timeless Lessons On Wealth, Greed and Happiness",
+    },
+    {
+      title: "The Price Of Money",
+      auther: "Rob Dix",
+      image: "/images/The Price Of Money.jpg",
+      price: 15,
+      countInStock: 19,
+      genre: "Romance",
+      rating: 8.0,
+      numReviews: 20,
+      description:
+        "How To Prosper In A Financial World That's Rigged Against You",
+    },
+    {
+      title: "Your're Making Other People Rich",
+      auther: "Ryan Sterling",
+      image: "/images/You are Making Other People Rich.png",
+      price: 5,
+      countInStock: 5,
+      genre: "Romance",
+      rating: 2.2,
+      numReviews: 2,
+      description: "Making Other People Rich And Happy",
+    },
+  ],
+};
+export default data;
