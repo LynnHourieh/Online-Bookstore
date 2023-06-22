@@ -5,6 +5,8 @@ import logger from "use-reducer-logger";
 import Row  from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Product from "../components/Products/Product";
+import LoadingBox from "../components/Loading/Loading";
+import MessageBox from "../components//Message/Message";
 
 const reducer = (state, action) => {
   const { type, payload } = action;
@@ -47,9 +49,9 @@ function HomeScreen() {
       <h1>Featured Books</h1>
       <div className="products">
         {loading ? (
-          <div>loading...</div>
+          <LoadingBox />
         ) : error ? (
-          <div>{error}</div>
+          <MessageBox variant="danger">{error}</MessageBox>
         ) : (
           <Row>
             {products.map((product) => (

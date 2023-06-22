@@ -8,7 +8,9 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
+import LoadingBox from "../components/Loading/Loading";
+import MessageBox from "../components//Message/Message";
+import { getError } from "../utlis";
 import Badge from "react-bootstrap/Badge";
 import Rating from "../components/Rating/Rating";
 
@@ -47,9 +49,9 @@ function ProductScreen() {
     console.log(product);
   }, [title]);
   return loading ? (
-    <div>Loading ...</div>
+    <LoadingBox />
   ) : error ? (
-    <div>{error}</div>
+    <MessageBox variant="danger">{error}</MessageBox>
   ) : (
     <div>
       <Row>
