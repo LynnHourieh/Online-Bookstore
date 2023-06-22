@@ -1,8 +1,8 @@
 import React from "react";
-import { useEffect, useReducer,useContext } from "react";
+import { useEffect, useReducer, useContext } from "react";
 import logger from "use-reducer-logger";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
@@ -34,8 +34,10 @@ function ProductScreen() {
     reducer,
     INITAL_STATE
   );
+  const navigate = useNavigate();
   const params = useParams();
   const { title } = params;
+
   useEffect(() => {
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
@@ -43,19 +45,28 @@ function ProductScreen() {
         const result = await axios.get(`/api/products/title/${title}`);
         dispatch({ type: "FETCH_SUCCESS", payload: result.data });
       } catch (error) {
-        dispatch({ type: "FETCH_FAIL", payload: error.message });
+        dispatch({ type: "FETCH_FAIL", payload: getError(error) });
       }
     };
     fetchData();
     console.log(product);
   }, [title]);
-    const { state, dispatch: ctxDispatch } = useContext(Store);
-    const addToCartHandler = () => {
-      ctxDispatch({
-        type: "CART_ADD_ITEM",
-        payload: { ...product, quantity: 1 },
-      });
-    };
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { cart } = state;
+  const addToCartHandler = async () => {
+    const existItem = cart.cartItems.find((x) => x._id === product._id);
+    const quantity = existItem ? existItem.quantity + 1 : 1;
+    const { data } = await axios.get(`/api/products/${product._id}`);
+    if (data.countInStock < quantity) {
+      window.alert("Product out of stuck");
+      return;
+    }
+    ctxDispatch({
+      type: "CART_ADD_ITEM",
+      payload: { ...product, quantity },
+    });
+    navigate("/cart")
+  };
   return loading ? (
     <LoadingBox />
   ) : error ? (
@@ -66,7 +77,7 @@ function ProductScreen() {
         <Col md={6}>
           <img className="img-large" src={product.image} alt={product.name} />
         </Col>
-        <Col md={3}>
+        <Col md={5}>
           <ListGroup variant="flush">
             <ListGroup.Item>
               <h1>{product.title}</h1>
@@ -77,14 +88,14 @@ function ProductScreen() {
                 numReviews={product.numReviews}
               ></Rating>
             </ListGroup>
-            <ListGroup.Item>Pirce : ${product.price}</ListGroup.Item>
+            <ListGroup.Item>Price : ${product.price}</ListGroup.Item>
             <ListGroup.Item>
               Description:
               <p>{product.description}</p>
+              <br></br>
             </ListGroup.Item>
           </ListGroup>
-        </Col>
-        <Col md={3}>
+
           <Card>
             <Card.Body>
               <ListGroup variant="flush">

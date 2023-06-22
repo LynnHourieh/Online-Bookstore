@@ -1,7 +1,7 @@
 const data = {
   products: [
     {
-      id: 1,
+      _id: "1",
       title: "The Power Of Pivotin",
       auther: "Monica Ortega",
       image: "/images/Pivotin.jpg",
@@ -13,7 +13,7 @@ const data = {
       description: "How To Embrace Change And Create A Life You Love",
     },
     {
-      id: 2,
+      _id: "2",
       title: "Psychology Of Money",
       auther: "Morgan Housel",
       image: "/images/Psychology.jpg",
@@ -25,7 +25,7 @@ const data = {
       description: "Timeless Lessons On Wealth, Greed and Happiness",
     },
     {
-      id: 3,
+      _id: "3",
       title: "The Price Of Money",
       auther: "Rob Dix",
       image: "/images/Money.jpg",
@@ -38,7 +38,7 @@ const data = {
         "How To Prosper In A Financial World That's Rigged Against You",
     },
     {
-      id: 4,
+      _id: "4",
       title: "Making Other People Rich",
       auther: "Ryan Sterling",
       image: "/images/Rich.jpg",
@@ -50,7 +50,7 @@ const data = {
       description: "Making Other People Rich And Happy",
     },
     {
-      id: 5,
+      _id: "5",
       title: "Your're Making Other People Rich",
       auther: "Ryan Sterling",
       image: "/images/Rich.jpg",

@@ -9,11 +9,11 @@ import { StoreProvider } from "./store";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <StoreProvider>
+    <StoreProvider>
+      <BrowserRouter>
         <App />
-      </StoreProvider>
-    </BrowserRouter>
+      </BrowserRouter>
+    </StoreProvider>
   </React.StrictMode>
 );
 
