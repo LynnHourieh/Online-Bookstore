@@ -7,16 +7,20 @@ import MessageBox from "../components/Message/Message";
 import ListGroup from "react-bootstrap/ListGroup";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function CartScreen() {
+    const navigate=useNavigate()
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const {
     cart: { cartItems },
   } = state;
-
+ 
+   
   const updateCartHandler = async (item, quantity) => {
+    
     const { data } = await axios.get(`/api/products/${item._id}`);
+
     if (data.countInStock < quantity) {
       window.alert("Product out of stuck");
       return;
@@ -32,7 +36,9 @@ export default function CartScreen() {
       payload: item,
     });
   };
-
+const checkoutHandler=()=>{
+    navigate('/signin?redirect=/shipping')
+}
   return (
     <div>
       <title>Shopping Cart</title>
@@ -116,6 +122,7 @@ export default function CartScreen() {
                       type="button"
                       variant="primary"
                       disabled={cartItems.length === 0}
+                      onClick={checkoutHandler}
                     >
                       Proceed to Checkout
                     </Button>

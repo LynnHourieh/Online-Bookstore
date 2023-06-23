@@ -55,7 +55,7 @@ const data = {
       auther: "Ryan Sterling",
       image: "/images/Rich.jpg",
       price: 5,
-      countInStock: 5,
+      countInStock: 0,
       genre: "Romance",
       rating: 4,
 
