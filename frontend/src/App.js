@@ -11,7 +11,7 @@ import Badge from "react-bootstrap/Badge";
 import Nav from "react-bootstrap/Nav";
 import { Link } from "react-router-dom";
 import CartScreen from "./screens/CartScreen";
-
+import SigninScreen from "./screens/SigninScreen";
 import { LinkContainer } from "react-router-bootstrap";
 function App() {
     const { state } = useContext(Store);
@@ -30,9 +30,14 @@ function App() {
               Cart
               {cart.cartItems.length > 0 && (
                 <Badge pill bg="primary">
-                  {cart.cartItems.reduce((a,c)=>a+c.quantity,0)}
+                  {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
                 </Badge>
               )}
+            </Link>
+          </Nav>
+          <Nav>
+            <Link className="nav-link" to="/signin">
+              Signin
             </Link>
           </Nav>
         </Container>
@@ -44,6 +49,7 @@ function App() {
             <Route path="/" element={<HomeScreen />} />
             <Route path="/product/:_id" element={<ProductScreen />} />
             <Route path="/cart" element={<CartScreen />} />
+            <Route path="/signin" element={<SigninScreen />} />
           </Routes>
         </Container>
       </main>
