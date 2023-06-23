@@ -15,6 +15,7 @@ import CartScreen from "./screens/CartScreen";
 import { LinkContainer } from "react-router-bootstrap";
 function App() {
     const { state } = useContext(Store);
+    //console.log("state",state)
     const { cart } = state;
   return (
     <div className="d-flex flex-column site-container">
@@ -23,6 +24,7 @@ function App() {
           <LinkContainer to="/">
             <Navbar.Brand>BookStore</Navbar.Brand>
           </LinkContainer>
+          {/* cart icon */}
           <Nav className="me-auto">
             <Link to="/cart" className="nav-link">
               Cart
@@ -40,7 +42,7 @@ function App() {
         <Container>
           <Routes>
             <Route path="/" element={<HomeScreen />} />
-            <Route path="/product/:title" element={<ProductScreen />} />
+            <Route path="/product/:_id" element={<ProductScreen />} />
             <Route path="/cart" element={<CartScreen />} />
           </Routes>
         </Container>

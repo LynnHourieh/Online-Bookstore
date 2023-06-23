@@ -34,27 +34,32 @@ function ProductScreen() {
     reducer,
     INITAL_STATE
   );
+  
   const navigate = useNavigate();
+  //to take title from url use useParams();
   const params = useParams();
-  const { title } = params;
+  const { _id } = params;
 
   useEffect(() => {
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
-        const result = await axios.get(`/api/products/title/${title}`);
+        const result = await axios.get(`/api/products/${_id}`);
         dispatch({ type: "FETCH_SUCCESS", payload: result.data });
       } catch (error) {
         dispatch({ type: "FETCH_FAIL", payload: getError(error) });
       }
     };
     fetchData();
-    console.log(product);
-  }, [title]);
+    console.log(_id);
+  }, [_id]);
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart } = state;
+  console.log(cart);
   const addToCartHandler = async () => {
+    
     const existItem = cart.cartItems.find((x) => x._id === product._id);
+    //quantity as a number used in navbar
     const quantity = existItem ? existItem.quantity + 1 : 1;
     const { data } = await axios.get(`/api/products/${product._id}`);
     if (data.countInStock < quantity) {
@@ -65,7 +70,7 @@ function ProductScreen() {
       type: "CART_ADD_ITEM",
       payload: { ...product, quantity },
     });
-    navigate("/cart")
+    navigate("/cart");
   };
   return loading ? (
     <LoadingBox />
@@ -85,7 +90,7 @@ function ProductScreen() {
             <ListGroup>
               <Rating
                 rating={product.rating}
-                numReviews={product.numReviews}
+              
               ></Rating>
             </ListGroup>
             <ListGroup.Item>Price : ${product.price}</ListGroup.Item>

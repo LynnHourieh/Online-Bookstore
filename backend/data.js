@@ -6,22 +6,22 @@ const data = {
       auther: "Monica Ortega",
       image: "/images/Pivotin.jpg",
       price: 20,
-      countInStock: 7,
+      countInStock: 3,
       genre: "Drama",
       rating: 1.5,
-      numReviews: 10,
+
       description: "How To Embrace Change And Create A Life You Love",
     },
     {
       _id: "2",
-      title: "Psychology Of Money",
+      title: "Psycology Of Money",
       auther: "Morgan Housel",
       image: "/images/Psychology.jpg",
       price: 10,
       countInStock: 22,
       genre: "Drama",
       rating: 4.0,
-      numReviews: 10,
+
       description: "Timeless Lessons On Wealth, Greed and Happiness",
     },
     {
@@ -33,7 +33,7 @@ const data = {
       countInStock: 19,
       genre: "Romance",
       rating: 2.0,
-      numReviews: 20,
+
       description:
         "How To Prosper In A Financial World That's Rigged Against You",
     },
@@ -46,7 +46,7 @@ const data = {
       countInStock: 5,
       genre: "Romance",
       rating: 0.5,
-      numReviews: 2,
+
       description: "Making Other People Rich And Happy",
     },
     {
@@ -58,7 +58,7 @@ const data = {
       countInStock: 5,
       genre: "Romance",
       rating: 4,
-      numReviews: 2,
+
       description: "Making Other People Rich And Happy",
     },
   ],

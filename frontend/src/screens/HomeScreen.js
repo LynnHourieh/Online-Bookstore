@@ -43,7 +43,7 @@ function HomeScreen() {
     };
     fetchData();
   }, []);
-  console.log(products);
+  //console.log(products);
   return (
     <div>
       <h1>Featured Books</h1>
