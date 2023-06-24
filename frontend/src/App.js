@@ -21,6 +21,7 @@ import ShippingAddressScreen from "./screens/ShippingAddressScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
 import OrderHistoryScreen from "./screens/OrderHistoryScreen"
+import ProfileScreen from "./screens/ProfileScreen";
 
 
 
@@ -98,6 +99,7 @@ function App() {
             <Route path="/shipping" element={<ShippingAddressScreen />} />
             <Route path="/placeorder" element={<PlaceOrderScreen />} />
             <Route path="/order/:id" element={<OrderScreen />} />
+            <Route path="/profile" element={<ProfileScreen/>}/>
             <Route
               path="/orderhistory"
               element={<OrderHistoryScreen />}

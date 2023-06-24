@@ -7,13 +7,14 @@ import { Store } from "../store";
 import { getError } from "../utlis";
 import Button from "react-bootstrap/esm/Button";
 const reducer = (state, action) => {
-  switch (action.type) {
+    const{type,payload}=action
+  switch (type) {
     case "FETCH_REQUEST":
       return { ...state, loading: true };
     case "FETCH_SUCCESS":
-      return { ...state, orders: action.payload, loading: false };
+      return { ...state, orders: payload, loading: false };
     case "FETCH_FAIL":
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, error: payload };
     default:
       return state;
   }
@@ -29,6 +30,9 @@ export default function OrderHistoryScreen() {
     error: "",
   });
   useEffect(() => {
+    if(!userInfo){
+        navigate("/signin")
+    }
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
