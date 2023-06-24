@@ -19,6 +19,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ShippingAddressScreen from "./screens/ShippingAddressScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
+import OrderScreen from "./screens/OrderScreen"
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const navigate = useNavigate();
@@ -33,7 +34,7 @@ function App() {
   };
   return (
     <div className="d-flex flex-column site-container">
-      <ToastContainer position="bottom-center" limit={1}/>
+      <ToastContainer position="bottom-center" limit={1} />
       <Navbar bg="light" variant="light">
         <Container>
           <LinkContainer to="/">
@@ -67,7 +68,11 @@ function App() {
           </Nav>
           <Nav>
             {userInfo ? (
-              <Link to="#signout" className="dropdown-item" onClick={signoutHandler}>
+              <Link
+                to="#signout"
+                className="dropdown-item"
+                onClick={signoutHandler}
+              >
                 Sign Out
               </Link>
             ) : (
@@ -84,9 +89,10 @@ function App() {
             <Route path="/product/:_id" element={<ProductScreen />} />
             <Route path="/cart" element={<CartScreen />} />
             <Route path="/signin" element={<SigninScreen />} />
-            <Route path="/signup" element={<SignupScreen/>} />
-            <Route path="/shipping" element ={<ShippingAddressScreen/>} />
-            <Route path="/placeorder" element={<PlaceOrderScreen/>} />
+            <Route path="/signup" element={<SignupScreen />} />
+            <Route path="/shipping" element={<ShippingAddressScreen />} />
+            <Route path="/placeorder" element={<PlaceOrderScreen />} />
+            <Route path="/order/:id" element={<OrderScreen />}></Route>
           </Routes>
         </Container>
       </main>
