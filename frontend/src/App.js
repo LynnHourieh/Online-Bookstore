@@ -12,6 +12,7 @@ import Nav from "react-bootstrap/Nav";
 import { Link } from "react-router-dom";
 import CartScreen from "./screens/CartScreen";
 import SigninScreen from "./screens/SigninScreen";
+import SignupScreen from "./screens/SignupScreen";
 import { LinkContainer } from "react-router-bootstrap";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { toast, ToastContainer } from "react-toastify";
@@ -82,6 +83,7 @@ function App() {
             <Route path="/product/:_id" element={<ProductScreen />} />
             <Route path="/cart" element={<CartScreen />} />
             <Route path="/signin" element={<SigninScreen />} />
+            <Route path="/signup" element={<SignupScreen/>} />
             <Route path="/shipping" element ={<ShippingAddressScreen/>} />
           </Routes>
         </Container>
