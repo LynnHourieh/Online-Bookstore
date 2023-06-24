@@ -37,7 +37,9 @@ function Product({ product }) {
           {/* Go to ProductScreen Component */}
           <Card.Title>{product.title}</Card.Title>
         </Link>
+        
         <Rating rating={product.rating} />
+        
         <Card.Text>{product.price} $</Card.Text>
         <Card.Text>By: {product.auther}</Card.Text>
         {product.countInStock === 0 ? (

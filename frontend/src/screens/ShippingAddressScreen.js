@@ -13,6 +13,7 @@ export default function ShippingAddressScreen() {
     userInfo,
     cart: { shippingAddress },
   } = state;
+
   //console.log(state.cart);
   const [fullName, setFullName] = useState(shippingAddress.fullName || "");
   const [address, setAddress] = useState(shippingAddress.address || "");
@@ -43,7 +44,7 @@ export default function ShippingAddressScreen() {
         country,
       })
     );
-    navigate("/payment");
+    navigate("/placeorder");
   };
   //to prevent navigating to shipping component while signout
   //then direct it again to shipping component
@@ -100,24 +101,7 @@ export default function ShippingAddressScreen() {
               required
             />
           </Form.Group>
-          <div className="mb-3">
-            <Button
-              id="chooseOnMap"
-              type="button"
-              variant="light"
-              onClick={() => navigate("/map")}
-            >
-              Choose Location On Map
-            </Button>
-            {/* {shippingAddress.location && shippingAddress.location.lat ? (
-              <div>
-                LAT: {shippingAddress.location.lat}
-                LNG:{shippingAddress.location.lng}
-              </div>
-            ) : (
-              <div>No location</div>
-            )} */}
-          </div>
+          
 
           <div className="mb-3">
             <Button variant="primary" type="submit">

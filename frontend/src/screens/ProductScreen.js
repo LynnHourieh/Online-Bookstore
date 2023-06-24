@@ -34,7 +34,7 @@ function ProductScreen() {
     reducer,
     INITAL_STATE
   );
-  
+
   const navigate = useNavigate();
   //to take title from url use useParams();
   const params = useParams();
@@ -84,18 +84,18 @@ function ProductScreen() {
             <ListGroup.Item>
               <h1>{product.title}</h1>
             </ListGroup.Item>
+            Genre: {product.genre}
             <ListGroup>
-              <Rating
-                rating={product.rating}
-              
-              ></Rating>
+              <div className="d-flex">
+                <div>Rating: </div>
+                <Rating rating={product.rating}></Rating>
+              </div>
             </ListGroup>
-            <ListGroup.Item>Price : ${product.price}</ListGroup.Item>
-            <ListGroup.Item>
+            Auther : {product.auther}
+            <ListGroup>
               Description:
               <p>{product.description}</p>
-              <br></br>
-            </ListGroup.Item>
+            </ListGroup>
           </ListGroup>
 
           <Card>
@@ -104,7 +104,7 @@ function ProductScreen() {
                 <ListGroup.Item>
                   <Row>
                     <Col>Price:</Col>
-                    <Col>${product.price}</Col>
+                    <Col>{product.price}$</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>

@@ -18,6 +18,7 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ShippingAddressScreen from "./screens/ShippingAddressScreen";
+import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const navigate = useNavigate();
@@ -85,6 +86,7 @@ function App() {
             <Route path="/signin" element={<SigninScreen />} />
             <Route path="/signup" element={<SignupScreen/>} />
             <Route path="/shipping" element ={<ShippingAddressScreen/>} />
+            <Route path="/placeorder" element={<PlaceOrderScreen/>} />
           </Routes>
         </Container>
       </main>
