@@ -19,7 +19,12 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ShippingAddressScreen from "./screens/ShippingAddressScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
-import OrderScreen from "./screens/OrderScreen"
+import OrderScreen from "./screens/OrderScreen";
+import OrderHistoryScreen from "./screens/OrderHistoryScreen"
+
+
+
+
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const navigate = useNavigate();
@@ -27,10 +32,10 @@ function App() {
   const { cart, userInfo } = state;
   const signoutHandler = () => {
     ctxDispatch({ type: "USER_SIGNOUT" });
-     localStorage.removeItem("userInfo");
-     localStorage.removeItem("shippingAddress");
-     localStorage.removeItem("cartItems")
-     window.location.href = "/signin";
+    localStorage.removeItem("userInfo");
+    localStorage.removeItem("shippingAddress");
+    localStorage.removeItem("cartItems");
+    window.location.href = "/signin";
   };
   return (
     <div className="d-flex flex-column site-container">
@@ -92,7 +97,11 @@ function App() {
             <Route path="/signup" element={<SignupScreen />} />
             <Route path="/shipping" element={<ShippingAddressScreen />} />
             <Route path="/placeorder" element={<PlaceOrderScreen />} />
-            <Route path="/order/:id" element={<OrderScreen />}></Route>
+            <Route path="/order/:id" element={<OrderScreen />} />
+            <Route
+              path="/orderhistory"
+              element={<OrderHistoryScreen />}
+            ></Route>
           </Routes>
         </Container>
       </main>

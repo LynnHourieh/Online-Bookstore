@@ -28,7 +28,7 @@ function reducer(state, action) {
 export default function OrderScreen() {
   const { state } = useContext(Store);
   const { userInfo } = state;
-console.log(state)
+
   const params = useParams();
   const { id: orderId } = params;
   const navigate = useNavigate();
@@ -60,7 +60,7 @@ console.log(state)
       fetchOrder();
     }
   }, [order, userInfo, orderId, navigate]);
-  console.log(order)
+ 
   return loading ? (
     <LoadingBox></LoadingBox>
   ) : error ? (
