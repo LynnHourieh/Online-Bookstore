@@ -54,19 +54,28 @@ const checkoutHandler=()=>{
             <ListGroup>
               {cartItems.map((item) => (
                 <ListGroup.Item key={item._id}>
-                  <Link
-                    className="align-items-center"
-                    to={`/product/${item._id}`}
-                  >
-                    {item.title}
-                  </Link>
                   <Row className="align-items-center">
-                    <Col md={4}>
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="img-fluid rounded img-thumbnail"
-                      ></img>{" "}
+                    <Col md={3}>
+                      <Link
+                        style={{ textDecoration: "none", color: "black" }}
+                        className="align-items-center"
+                        to={`/product/${item._id}`}
+                      >
+                        {item.title}
+                      </Link>
+                    </Col>
+                    <Col md={2}>
+                      {" "}
+                      <Link
+                        className="align-items-center"
+                        to={`/product/${item._id}`}
+                      >
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="img-fluid rounded img-thumbnail"
+                        ></img>{" "}
+                      </Link>
                     </Col>
 
                     <Col md={3}>
@@ -90,7 +99,8 @@ const checkoutHandler=()=>{
                         <i className="fas fa-plus-circle"></i>
                       </Button>
                     </Col>
-                    <Col md={3}>${item.price}</Col>
+                    <Col md={2}>${item.price}</Col>
+
                     <Col md={2}>
                       <Button
                         variant="light"

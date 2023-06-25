@@ -22,8 +22,11 @@ import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
 import OrderHistoryScreen from "./screens/OrderHistoryScreen";
 import ProfileScreen from "./screens/ProfileScreen";
+import WishListScreen from "./screens/WishListScreen";
 import { getError } from "./utlis";
 import SearchScreen from "./screens/SearchScreen";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -36,6 +39,7 @@ function App() {
     localStorage.removeItem("userInfo");
     localStorage.removeItem("shippingAddress");
     localStorage.removeItem("cartItems");
+    localStorage.removeItem("wishlistItems")
     window.location.href = "/signin";
   };
 
@@ -49,10 +53,18 @@ function App() {
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-           <SearchBox />
+            <SearchBox />
           </Navbar.Collapse>
-          
+
           <Nav className="me-auto">
+            <Link className="nav-link" to="/wishlist">
+              {" "}
+              <FontAwesomeIcon
+                icon={faHeart}
+                color={"red"}
+                style={{ fontSize: 28, marginBottom: 10 }}
+              />
+            </Link>
             <Link to="/cart" className="nav-link">
               Cart
               {cart.cartItems.length > 0 && (
@@ -76,19 +88,20 @@ function App() {
                 Sign in
               </Link>
             )}
-          </Nav>
-          <Nav>
-            {userInfo ? (
-              <Link
-                to="#signout"
-                className="dropdown-item"
-                onClick={signoutHandler}
-              >
-                Sign Out
-              </Link>
-            ) : (
-              ""
-            )}
+          
+              {userInfo ? (
+                <Link
+                  to="#signout"
+                  className="dropdown-item"
+                  style={{marginTop:7}}
+                  onClick={signoutHandler}
+                >
+                  Sign Out
+                </Link>
+              ) : (
+                ""
+              )}
+            
           </Nav>
         </Container>
       </Navbar>
@@ -99,6 +112,7 @@ function App() {
             <Route path="/" element={<HomeScreen />} />
             <Route path="/product/:_id" element={<ProductScreen />} />
             <Route path="/cart" element={<CartScreen />} />
+            <Route path="/wishlist" element={<WishListScreen />} />
             <Route path="/signin" element={<SigninScreen />} />
             <Route path="/signup" element={<SignupScreen />} />
             <Route path="/shipping" element={<ShippingAddressScreen />} />

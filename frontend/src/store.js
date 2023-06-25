@@ -19,6 +19,11 @@ const initialState = {
     loading: true,
     error: "",
   },
+  wishlist: {
+    wishlistItems: localStorage.getItem("wishlistItems")
+      ? JSON.parse(localStorage.getItem("wishlistItems"))
+      : [],
+  },
 };
 function reducer(state, action) {
   const { type, payload } = action;
@@ -68,8 +73,28 @@ function reducer(state, action) {
     }
     case "CART_CLEAR":
       return { ...state, cart: { ...state.cart, cartItems: [] } };
+
+    case "ADD_ITEM_TO_WISHLIST":
+      const newproduct = payload;
+      const existproduct = state.wishlist.wishlistItems.find(
+        (item) => item._id === newproduct._id
+      );
+      const wishlistItems = existproduct
+        ? state.wishlist.wishlistItems.map((item) =>
+            item._id === existproduct._id ? newproduct : item
+          )
+        : [...state.wishlist.wishlistItems, newproduct];
+      localStorage.setItem("wishlistItems", JSON.stringify(wishlistItems));
+      return { ...state, wishlist: { ...state.wishlist, wishlistItems } };
+    case "REMOVE_ITEM_FROM_WISHLIST":{const wishlistItems = state.wishlist.wishlistItems.filter(
+        (item) => item._id !== payload._id
+      );
+      localStorage.setItem("wishlistItems", JSON.stringify(wishlistItems));
+      return { ...state, wishlist: { ...state.wishlist, wishlistItems } };}
+      
     case "USER_SIGNIN":
       return { ...state, userInfo: payload };
+
     case "USER_SIGNOUT":
       return {
         ...state,
