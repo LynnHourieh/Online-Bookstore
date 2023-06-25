@@ -107,7 +107,7 @@ function PlaceOrderScreen() {
                               src={item.image}
                               alt={item.title}
                               className="img-fluid rounded img-thumbnail"
-                              style={{ height: 250 }}
+                              style={{ height: 200 }}
                             ></img>
                             {"  "}
                             {item.title}

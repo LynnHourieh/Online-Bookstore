@@ -1,11 +1,11 @@
-import logo from "./logo.svg";
 import "./App.css";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import HomeScreen from "./screens/HomeScreen";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import ProductScreen from "./screens/ProductScreen";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
+import SearchBox from "./components/SearchBox";
 import { Store } from "./store";
 import Badge from "react-bootstrap/Badge";
 import Nav from "react-bootstrap/Nav";
@@ -20,17 +20,17 @@ import "react-toastify/dist/ReactToastify.css";
 import ShippingAddressScreen from "./screens/ShippingAddressScreen";
 import PlaceOrderScreen from "./screens/PlaceOrderScreen";
 import OrderScreen from "./screens/OrderScreen";
-import OrderHistoryScreen from "./screens/OrderHistoryScreen"
+import OrderHistoryScreen from "./screens/OrderHistoryScreen";
 import ProfileScreen from "./screens/ProfileScreen";
-
-
-
+import { getError } from "./utlis";
+import SearchScreen from "./screens/SearchScreen";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const navigate = useNavigate();
-  //console.log("state",state)
-  const { cart, userInfo } = state;
+  const { cart, userInfo, productInfo } = state;
+  const { products } = productInfo;
+
   const signoutHandler = () => {
     ctxDispatch({ type: "USER_SIGNOUT" });
     localStorage.removeItem("userInfo");
@@ -38,15 +38,20 @@ function App() {
     localStorage.removeItem("cartItems");
     window.location.href = "/signin";
   };
+
   return (
-    <div className="d-flex flex-column site-container">
+    <div>
       <ToastContainer position="bottom-center" limit={1} />
       <Navbar bg="light" variant="light">
         <Container>
           <LinkContainer to="/">
             <Navbar.Brand>BookStore</Navbar.Brand>
           </LinkContainer>
-          {/* cart icon */}
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse id="basic-navbar-nav">
+           <SearchBox />
+          </Navbar.Collapse>
+          
           <Nav className="me-auto">
             <Link to="/cart" className="nav-link">
               Cart
@@ -87,7 +92,7 @@ function App() {
           </Nav>
         </Container>
       </Navbar>
-
+      <div></div>
       <main>
         <Container>
           <Routes>
@@ -99,7 +104,8 @@ function App() {
             <Route path="/shipping" element={<ShippingAddressScreen />} />
             <Route path="/placeorder" element={<PlaceOrderScreen />} />
             <Route path="/order/:id" element={<OrderScreen />} />
-            <Route path="/profile" element={<ProfileScreen/>}/>
+            <Route path="/profile" element={<ProfileScreen />} />
+            <Route path="/search" element={<SearchScreen />} />
             <Route
               path="/orderhistory"
               element={<OrderHistoryScreen />}

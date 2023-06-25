@@ -33,21 +33,27 @@ function Product({ product }) {
         <img src={product.image} className="card-img-top product-img" />
       </Link>
       <Card.Body className="card-body">
-        <Link to={`/product/${product._id}`}>
+        <Link
+          to={`/product/${product._id}`}
+          style={{ color: "black", textDecoration: "none" }}
+        >
           {/* Go to ProductScreen Component */}
           <Card.Title>{product.title}</Card.Title>
         </Link>
-        
+
         <Rating rating={product.rating} />
-        
+
         <Card.Text>{product.price} $</Card.Text>
         <Card.Text>By: {product.auther}</Card.Text>
+      
         {product.countInStock === 0 ? (
           <Button variant="light" disabled>
             Out of stock
           </Button>
         ) : (
-          <Button onClick={() => addToCartHandler(product)}>Add to cart</Button>
+          <Button variant="primary" onClick={() => addToCartHandler(product)}>
+            Add to cart
+          </Button>
         )}
       </Card.Body>
     </Card>

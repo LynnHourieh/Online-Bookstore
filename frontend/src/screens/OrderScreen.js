@@ -94,24 +94,29 @@ export default function OrderScreen() {
 
           <Card className="mb-3">
             <Card.Body>
-              <Card.Title>Items</Card.Title>
+              <Card.Title>Books</Card.Title>
               <ListGroup variant="flush">
                 {order.orderItems.map((item) => (
                   <ListGroup.Item key={item._id}>
                     <Row className="align-items-center">
                       <Col md={6}>
-                        <img
-                          src={item.image}
-                          alt={item.title}
-                          className="img-fluid rounded img-thumbnail"
-                          style={{ height: 250 }}
-                        ></img>{" "}
-                        <Link to={`/product/${item.id}`}>{item.title}</Link>
+                        <Link
+                          to={`/product/${item.id}`}
+                          style={{ textDecoration: "none", color: "black" }}
+                        >
+                          {item.title} {" "}
+                          <img
+                            src={item.image}
+                            alt={item.title}
+                            className="img-fluid rounded img-thumbnail"
+                            style={{ height: 200 }}
+                          ></img>{" "}
+                        </Link>
                       </Col>
-                      <Col md={3}>
-                        <span>{item.quantity}</span>
+                      <Col md={3}> Quantity: 
+                        <span>{" "}{item.quantity}</span>
                       </Col>
-                      <Col md={3}>{item.price}$</Col>
+                      <Col md={3}>Price:<span>{" "}{item.price}$</span></Col>
                     </Row>
                   </ListGroup.Item>
                 ))}
@@ -136,14 +141,14 @@ export default function OrderScreen() {
                     <Col>10$</Col>
                   </Row>
                 </ListGroup.Item>
-                
+
                 <ListGroup.Item>
                   <Row>
                     <Col>
                       <strong> Order Total</strong>
                     </Col>
                     <Col>
-                      <strong>{order.itemsPrice+10}$</strong>
+                      <strong>{order.itemsPrice + 10}$</strong>
                     </Col>
                   </Row>
                 </ListGroup.Item>

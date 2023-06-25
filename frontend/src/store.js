@@ -14,10 +14,38 @@ const initialState = {
   userInfo: localStorage.getItem("userInfo")
     ? JSON.parse(localStorage.getItem("userInfo"))
     : null,
+  productInfo: {
+    products: {},
+    loading: true,
+    error: "",
+  },
 };
 function reducer(state, action) {
   const { type, payload } = action;
   switch (type) {
+    case "Fetch_REQUEST":
+      return {
+        ...state,
+        productInfo: { ...state.productInfo, loading: true },
+      };
+    case "FETCH_SUCCESS":
+      return {
+        ...state,
+        productInfo: {
+          ...state.productInfo,
+          products: payload,
+          loading: false,
+        },
+      };
+    case "FETCH_FAIL":
+      return {
+        ...state,
+        productInfo: {
+          ...state.productInfo,
+          error: payload,
+          loading: false,
+        },
+      };
     case "CART_ADD_ITEM":
       // add to cart
       const newItem = payload;
@@ -39,13 +67,17 @@ function reducer(state, action) {
       return { ...state, cart: { ...state.cart, cartItems } };
     }
     case "CART_CLEAR":
-      return {...state,cart:{...state.cart,cartItems:[]}}
+      return { ...state, cart: { ...state.cart, cartItems: [] } };
     case "USER_SIGNIN":
       return { ...state, userInfo: payload };
     case "USER_SIGNOUT":
-      return { ...state, userInfo: null,cart:{cartItems:[],shippingAddress:{}} };
+      return {
+        ...state,
+        userInfo: null,
+        cart: { cartItems: [], shippingAddress: {} },
+      };
     case "SAVE_SHIPPING_ADDRESS":
-      return { ...state, cart:{...state.cart , shippingAddress:payload},};
+      return { ...state, cart: { ...state.cart, shippingAddress: payload } };
     default:
       return state;
   }
