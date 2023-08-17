@@ -85,6 +85,12 @@ function App() {
                 <LinkContainer to="/orderhistory">
                   <NavDropdown.Item>Order History</NavDropdown.Item>
                 </LinkContainer>
+                <NavDropdown.Divider />
+                <LinkContainer to="/signout">
+                  <NavDropdown.Item onClick={signoutHandler}>
+                    SignOut
+                  </NavDropdown.Item>
+                </LinkContainer>
               </NavDropdown>
             ) : (
               <Link className="nav-link" to="/signin">
@@ -92,17 +98,24 @@ function App() {
               </Link>
             )}
 
-            {userInfo ? (
-              <Link
-                to="#signout"
-                className="dropdown-item"
-                style={{ marginTop: 7 }}
-                onClick={signoutHandler}
-              >
-                Sign Out
-              </Link>
-            ) : (
-              ""
+            {userInfo && userInfo.isAdmin && (
+              <NavDropdown title="Admin" id="admin-nav-dropdown">
+                <LinkContainer to="/admin/dashboard">
+                  <NavDropdown.Item>Dashboard</NavDropdown.Item>
+                </LinkContainer>
+                <NavDropdown.Divider />
+                <LinkContainer to="/admin/productlist">
+                  <NavDropdown.Item>Products</NavDropdown.Item>
+                </LinkContainer>
+                <NavDropdown.Divider />
+                <LinkContainer to="/admin/orderlist">
+                  <NavDropdown.Item>Orders</NavDropdown.Item>
+                </LinkContainer>
+                <NavDropdown.Divider />
+                <LinkContainer to="/admin/userlist">
+                  <NavDropdown.Item>Users</NavDropdown.Item>
+                </LinkContainer>
+              </NavDropdown>
             )}
           </Nav>
         </Container>

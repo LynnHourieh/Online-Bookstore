@@ -7,7 +7,7 @@ import { isAuth } from "../utils.js";
 
 
 const userRouter = express.Router();
-
+ 
 userRouter.put(
   "/profile",
   isAuth,

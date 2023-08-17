@@ -3,7 +3,7 @@ import expressAsyncHandler from "express-async-handler";
 import Order from "../Models/orderModel.js";
 import User from "../Models/userModel.js";
 import Product from "../Models/productModel.js";
-import { isAuth } from "../utils.js";
+import { isAuth,isAdmin } from "../utils.js";
 
 const orderRouter = express.Router();
 
@@ -24,6 +24,51 @@ orderRouter.post(
     res.status(201).send({ message: "New Order Created", order });
   })
 );
+
+orderRouter.get(
+  "/summary",
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const orders = await Order.aggregate([
+      {
+        $group: {
+          _id: null,
+          numOrders: { $sum: 1 },
+          totalSales: { $sum: '$itemsPrice' },
+        },
+      },
+    ]);
+    const users = await User.aggregate([
+      {
+        $group: {
+          _id: null,
+          numUsers: { $sum: 1 },
+        },
+      },
+    ]);
+    const dailyOrders = await Order.aggregate([
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
+          orders: { $sum: 1 },
+          sales: { $sum: "$itemsPrice" },
+        },
+      },
+      { $sort: { _id: 1 } },
+    ]);
+    // const productCategories = await Product.aggregate([
+    //   {
+    //     $group: {
+    //       _id: "$category",
+    //       count: { $sum: 1 },
+    //     },
+    //   },
+    // ]);
+    res.send({ users, orders, dailyOrders });
+  })
+);
+
 //put /mine before /:id  "
 orderRouter.get(
   "/mine",
@@ -46,5 +91,6 @@ orderRouter.get(
     }
   })
 );
+
 
 export default orderRouter;
