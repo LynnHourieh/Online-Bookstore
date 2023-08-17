@@ -27,6 +27,9 @@ import { getError } from "./utlis";
 import SearchScreen from "./screens/SearchScreen";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import ProtectedRoute from "./components/Rating/User/ProtectedRoute";
+import AdminRoute from "./components/Admin/AdminRoute";
+import DashboardScreen from "./screens/DashboardScreen";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -39,7 +42,7 @@ function App() {
     localStorage.removeItem("userInfo");
     localStorage.removeItem("shippingAddress");
     localStorage.removeItem("cartItems");
-    localStorage.removeItem("wishlistItems")
+    localStorage.removeItem("wishlistItems");
     window.location.href = "/signin";
   };
 
@@ -88,20 +91,19 @@ function App() {
                 Sign in
               </Link>
             )}
-          
-              {userInfo ? (
-                <Link
-                  to="#signout"
-                  className="dropdown-item"
-                  style={{marginTop:7}}
-                  onClick={signoutHandler}
-                >
-                  Sign Out
-                </Link>
-              ) : (
-                ""
-              )}
-            
+
+            {userInfo ? (
+              <Link
+                to="#signout"
+                className="dropdown-item"
+                style={{ marginTop: 7 }}
+                onClick={signoutHandler}
+              >
+                Sign Out
+              </Link>
+            ) : (
+              ""
+            )}
           </Nav>
         </Container>
       </Navbar>
@@ -117,13 +119,40 @@ function App() {
             <Route path="/signup" element={<SignupScreen />} />
             <Route path="/shipping" element={<ShippingAddressScreen />} />
             <Route path="/placeorder" element={<PlaceOrderScreen />} />
-            <Route path="/order/:id" element={<OrderScreen />} />
-            <Route path="/profile" element={<ProfileScreen />} />
+            <Route
+              path="/order/:id"
+              element={
+                <ProtectedRoute>
+                  <OrderScreen />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <ProfileScreen />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/search" element={<SearchScreen />} />
             <Route
               path="/orderhistory"
-              element={<OrderHistoryScreen />}
-            ></Route>
+              element={
+                <ProtectedRoute>
+                  <OrderHistoryScreen />
+                </ProtectedRoute>
+              }
+            />
+            {/* Admin Side Dashboard */}
+            <Route
+              path="/admin/dashboard"
+              element={
+                <AdminRoute>
+                  <DashboardScreen />
+                </AdminRoute>
+              }
+            />
           </Routes>
         </Container>
       </main>

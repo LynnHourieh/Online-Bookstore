@@ -8,9 +8,6 @@ import { isAuth } from "../utils.js";
 
 const userRouter = express.Router();
 
-
-
-
 userRouter.put(
   "/profile",
   isAuth,
@@ -42,6 +39,7 @@ userRouter.post(
   "/signin",
   expressAsyncHandler(async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
+    console.log("user",user)
     if (user) {
         //check if password is correct
         // bycrpt password
