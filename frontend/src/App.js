@@ -30,6 +30,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import ProtectedRoute from "./components/Rating/User/ProtectedRoute";
 import AdminRoute from "./components/Admin/AdminRoute";
 import DashboardScreen from "./screens/DashboardScreen";
+import ProductListScreen from "./screens/ProductLisrScreen";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -104,15 +105,15 @@ function App() {
                   <NavDropdown.Item>Dashboard</NavDropdown.Item>
                 </LinkContainer>
                 <NavDropdown.Divider />
-                <LinkContainer to="/admin/productlist">
+                <LinkContainer to="/admin/product">
                   <NavDropdown.Item>Products</NavDropdown.Item>
                 </LinkContainer>
                 <NavDropdown.Divider />
-                <LinkContainer to="/admin/orderlist">
+                <LinkContainer to="/admin/order">
                   <NavDropdown.Item>Orders</NavDropdown.Item>
                 </LinkContainer>
                 <NavDropdown.Divider />
-                <LinkContainer to="/admin/userlist">
+                <LinkContainer to="/admin/user">
                   <NavDropdown.Item>Users</NavDropdown.Item>
                 </LinkContainer>
               </NavDropdown>
@@ -166,6 +167,14 @@ function App() {
                 </AdminRoute>
               }
             />
+            <Route
+              path="/admin/products"
+              element={
+                <AdminRoute>
+                  <ProductListScreen />
+                </AdminRoute>
+              }
+            ></Route>
           </Routes>
         </Container>
       </main>
