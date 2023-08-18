@@ -10,6 +10,7 @@ import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
 import { getError } from "../utlis";
 import ProductPopup from "../components/Products/ProductPopup";
+import Card from "react-bootstrap/Card";
 const reducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
@@ -18,6 +19,7 @@ const reducer = (state, action) => {
     case "FETCH_SUCCESS":
       return {
         ...state,
+        allproducts:payload.countProducts,
         products: payload.products,
         page: payload.page,
         pages: payload.pages,
@@ -51,11 +53,13 @@ export default function ProductListScreen() {
     setIsPopupOpen(false);
   };
 
-  const [{ loading, error, products, pages, loadingCreate }, dispatch] =
-    useReducer(reducer, {
-      loading: true,
-      error: "",
-    });
+  const [
+    { loading, error, products, pages, loadingCreate, allproducts },
+    dispatch,
+  ] = useReducer(reducer, {
+    loading: true,
+    error: "",
+  });
 
   const navigate = useNavigate();
   const { search } = useLocation();
@@ -105,8 +109,9 @@ export default function ProductListScreen() {
     <div>
       <Row>
         <Col>
-          <h1>Products</h1>
+          <h3>Products </h3>
         </Col>
+        <Col><h3>Total Products:{allproducts}</h3></Col>
         <Col className="col text-end">
           <div>
             <Button type="button" onClick={openPopup}>
@@ -119,6 +124,7 @@ export default function ProductListScreen() {
             />
           </div>
         </Col>
+        
       </Row>
 
       {loadingCreate && <LoadingBox></LoadingBox>}
@@ -128,14 +134,15 @@ export default function ProductListScreen() {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <>
-          <table className="table">
+          <table className="table" style={{marginTop:40}}>
             <thead>
               <tr>
                 <th>ID</th>
                 <th>NAME</th>
-                <th>Auther</th>
+                <th>AUTHOR</th>
                 <th>PRICE</th>
                 <th>COUNT IN STUCK</th>
+                <th>IMAGE</th>
               </tr>
             </thead>
             <tbody>
@@ -146,6 +153,7 @@ export default function ProductListScreen() {
                   <td>{product.auther}</td>
                   <td>{product.price}$</td>
                   <td>{product.countInStock}</td>
+                  <td><img style={{height:90}} src={`/images/${product.image}`}/></td>
                 </tr>
               ))}
             </tbody>

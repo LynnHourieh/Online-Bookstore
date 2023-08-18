@@ -43,7 +43,7 @@ function Product({ product }) {
     <Card style={{ height: 500 }}>
       <Link to={`/product/${product._id}`}>
         {" "}
-        <img src={`images/${product.image}`}  className="card-img-top product-img" />
+        <img src={`/images/${product.image}`}  className="card-img-top product-img" />
       </Link>
       <Card.Body className="card-body">
         <Link

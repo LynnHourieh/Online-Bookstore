@@ -44,12 +44,14 @@ const ProductPopup = ({ isOpen, onClose, onSave }) => {
       onRequestClose={onClose}
       className="modal-dialog modal-lg"
       style={customStyles}
+      ariaHideApp={false}
     >
       <div className="modal-content">
         <div className="modal-header">
           <h2 className="modal-title">Add New Product</h2>
         </div>
         <div className="modal-body">
+          <div>Title</div>
           <input
             type="text"
             className="form-control mb-3"
@@ -57,6 +59,7 @@ const ProductPopup = ({ isOpen, onClose, onSave }) => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
+          <div>Description</div>
           <input
             type="text"
             className="form-control mb-3"
@@ -64,6 +67,7 @@ const ProductPopup = ({ isOpen, onClose, onSave }) => {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
+          <div>Author</div>
           <input
             type="text"
             className="form-control mb-3"
@@ -71,6 +75,7 @@ const ProductPopup = ({ isOpen, onClose, onSave }) => {
             value={auther}
             onChange={(e) => setAuther(e.target.value)}
           />
+          <div>Genre</div>
           <input
             type="text"
             className="form-control mb-3"
@@ -78,6 +83,7 @@ const ProductPopup = ({ isOpen, onClose, onSave }) => {
             value={genre}
             onChange={(e) => setGenre(e.target.value)}
           />
+          <div>Price</div>
           <input
             type="number"
             className="form-control mb-3"
@@ -85,6 +91,7 @@ const ProductPopup = ({ isOpen, onClose, onSave }) => {
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />
+          <div>CountInStock</div>
           <input
             type="number"
             className="form-control mb-3"

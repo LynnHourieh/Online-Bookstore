@@ -100,6 +100,7 @@ function reducer(state, action) {
         ...state,
         userInfo: null,
         cart: { cartItems: [], shippingAddress: {} },
+        wishlist:{wishlistItems:[]}
       };
     case "SAVE_SHIPPING_ADDRESS":
       return { ...state, cart: { ...state.cart, shippingAddress: payload } };

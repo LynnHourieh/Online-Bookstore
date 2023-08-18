@@ -63,17 +63,7 @@ export default function DashboardScreen() {
         <>
           <Row>
             <Col md={4}>
-              <Card>
-                <Card.Body>
-                  <Card.Title>Users</Card.Title>
-                  <Card.Text>
-                    {" "}
-                    {summary.users && summary.users[0]
-                      ? summary.users[0].numUsers
-                      : 0}
-                  </Card.Text>
-                </Card.Body>
-              </Card>
+
             </Col>
             <Col md={4}>
               <Card>

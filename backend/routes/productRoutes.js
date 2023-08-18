@@ -22,7 +22,7 @@ productRouter.get("/", async (req, res) => {
   res.send(products);
 });
 
-const PAGE_SIZE = 2;
+const PAGE_SIZE = 5;
 
 productRouter.get(
   "/admin",

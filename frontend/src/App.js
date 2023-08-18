@@ -35,9 +35,9 @@ import ProductListScreen from "./screens/ProductListScreen";
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const navigate = useNavigate();
-  const { cart, userInfo, productInfo } = state;
+  const { cart, userInfo, productInfo,wishlist } = state;
   const { products } = productInfo;
-
+console.log(wishlist.wishlistItems)
   const signoutHandler = () => {
     ctxDispatch({ type: "USER_SIGNOUT" });
     localStorage.removeItem("userInfo");
@@ -62,12 +62,13 @@ function App() {
 
           <Nav className="me-auto">
             <Link className="nav-link" to="/wishlist">
-              {" "}
-              <FontAwesomeIcon
-                icon={faHeart}
-                color={"red"}
-                style={{ fontSize: 28, marginBottom: 10 }}
-              />
+              WishList
+              {wishlist.wishlistItems.length > 0 && (
+                <Badge pill bg="primary">
+                  {wishlist.wishlistItems.length}
+                </Badge>
+              )}{" "}
+          
             </Link>
             <Link to="/cart" className="nav-link">
               Cart
