@@ -30,7 +30,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import ProtectedRoute from "./components/Rating/User/ProtectedRoute";
 import AdminRoute from "./components/Admin/AdminRoute";
 import DashboardScreen from "./screens/DashboardScreen";
-import ProductListScreen from "./screens/ProductLisrScreen";
+import ProductListScreen from "./screens/ProductListScreen";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -105,7 +105,7 @@ function App() {
                   <NavDropdown.Item>Dashboard</NavDropdown.Item>
                 </LinkContainer>
                 <NavDropdown.Divider />
-                <LinkContainer to="/admin/product">
+                <LinkContainer to="/admin/products">
                   <NavDropdown.Item>Products</NavDropdown.Item>
                 </LinkContainer>
                 <NavDropdown.Divider />

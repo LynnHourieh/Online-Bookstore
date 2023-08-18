@@ -2,6 +2,20 @@ import express from "express";
 import Product from "../Models/productModel.js";
 import expressAsyncHandler from "express-async-handler";
 import { isAdmin,isAuth } from "../utils.js";
+import multer from "multer";
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    callback(null, "../frontend/public/images/");
+  },
+  filename: (req, file, callback) => {
+    
+    callback(null, file.originalname);
+  },
+});
+const upload = multer({ storage: storage });
+
 const productRouter = express.Router();
 productRouter.get("/", async (req, res) => {
   const products = await Product.find();
@@ -31,7 +45,35 @@ productRouter.get(
     });
   })
 );
+productRouter.post(
+  "/",
+  isAuth,
+  isAdmin,
+  upload.single("ProductImage"),
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const NewProduct = new Product({
+        image: req.file.originalname,
+        title: req.body.title,
+        price: req.body.price,
+        auther: req.body.auther, 
+        countInStock: req.body.countInStock,
+        description: req.body.description,
+        rating: req.body.rating,
+        genre:req.body.genre
+      });
 
+      const savedProduct = await NewProduct.save();
+      res.json(savedProduct);
+    } catch (error) {
+      res
+        .status(400)
+        .json({ message: "Error adding product", error: error.message });
+    }
+  })
+);
+
+     
 // productRouter.get(
 //   "/search",
 //   expressAsyncHandler(async (req, res) => {

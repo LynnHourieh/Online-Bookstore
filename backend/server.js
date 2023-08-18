@@ -8,6 +8,7 @@ import userRouter from "./routes/userRoutes.js"
 import orderRouter from "./routes/orderRoutes.js";
 
 
+
 //for .env file
 dotenv.config();
 //connect to db
@@ -27,7 +28,7 @@ app.use("/api/seed", seedRouter);
 app.use("/api/products",productRouter)
 app.use("/api/users", userRouter);
 app.use("/api/orders",orderRouter)
-
+ 
 
 
 // app.get("/api/products", (req, res) => {

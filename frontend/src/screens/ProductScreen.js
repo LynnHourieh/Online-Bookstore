@@ -53,6 +53,7 @@ function ProductScreen() {
     fetchData();
     console.log(_id);
   }, [_id]);
+  console.log(product)
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart } = state;
   const addToCartHandler = async () => {
@@ -77,7 +78,11 @@ function ProductScreen() {
     <div>
       <Row>
         <Col md={6}>
-          <img className="img-large" src={product.image} alt={product.name} />
+          <img
+            className="img-large"
+            src={`/images/${product.image}`}
+            alt={product.name}
+          />
         </Col>
         <Col md={5}>
           <ListGroup variant="flush">
