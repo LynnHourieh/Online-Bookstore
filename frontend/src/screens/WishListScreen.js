@@ -50,7 +50,7 @@ export default function WishListScreen() {
                       >
                         {" "}
                         <img
-                          src={item.image}
+                          src={`/images/${item.image}`}
                           alt={item.name}
                           className="img-fluid rounded img-thumbnail"
                         ></img>{" "}

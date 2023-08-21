@@ -37,7 +37,7 @@ function App() {
   const navigate = useNavigate();
   const { cart, userInfo, productInfo,wishlist } = state;
   const { products } = productInfo;
-console.log(wishlist.wishlistItems)
+//console.log(wishlist.wishlistItems)
   const signoutHandler = () => {
     ctxDispatch({ type: "USER_SIGNOUT" });
     localStorage.removeItem("userInfo");
@@ -53,7 +53,15 @@ console.log(wishlist.wishlistItems)
       <Navbar bg="light" variant="light">
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand>BookStore</Navbar.Brand>
+            <Navbar.Brand>
+              <i
+                class="bi bi-book"
+                style={{
+                  fontSize: "25px",
+                }}
+              ></i>{" "}
+              BookStore{" "}
+            </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
@@ -62,16 +70,27 @@ console.log(wishlist.wishlistItems)
 
           <Nav className="me-auto">
             <Link className="nav-link" to="/wishlist">
-              WishList
+              <i
+                class="bi bi-heart-fill"
+                style={{
+                  fontSize: "25px",
+                  color: "red",
+                }}
+              ></i>
               {wishlist.wishlistItems.length > 0 && (
                 <Badge pill bg="primary">
                   {wishlist.wishlistItems.length}
                 </Badge>
               )}{" "}
-          
             </Link>
             <Link to="/cart" className="nav-link">
-              Cart
+             
+              <i
+                class="bi bi-cart"
+                style={{
+                  fontSize: "25px",
+                }}
+              ></i>
               {cart.cartItems.length > 0 && (
                 <Badge pill bg="primary">
                   {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}

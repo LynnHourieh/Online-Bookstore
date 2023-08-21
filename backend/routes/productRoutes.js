@@ -18,7 +18,10 @@ const upload = multer({ storage: storage });
 
 const productRouter = express.Router();
 productRouter.get("/", async (req, res) => {
-  const products = await Product.find();
+  const products = await Product.find()
+    .sort({ title: 1 }) // Sort by title in ascending alphabetical order
+    .exec();
+;
   res.send(products);
 });
 

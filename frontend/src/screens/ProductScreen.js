@@ -137,7 +137,18 @@ function ProductScreen() {
               </ListGroup>
             </Card.Body>
           </Card>
+          
         </Col>
+      </Row><Row>
+      <Col md={6}>Adding feedback</Col>
+      <Col md={5}><h2>Reviews</h2><form>
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">add your feedbacks or notes</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"/>
+   
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form></Col>
       </Row>
     </div>
   );

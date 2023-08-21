@@ -14,7 +14,10 @@ function Product({ product }) {
   const {
     cart: { cartItems },
   } = state;
-
+  const {
+    wishlist: { wishlistItems },
+  } = state;
+  console.log(wishlistItems)
   const addToCartHandler = async (product) => {
     const existItem = cartItems.find((x) => x._id === product._id);
     const quantity = existItem ? existItem.quantity + 1 : 1;
@@ -34,16 +37,22 @@ function Product({ product }) {
       type: "ADD_ITEM_TO_WISHLIST",
       payload: { ...product, status: true },
     });
-    toast("item added to wishlish")
-   
-
+  };
+  const removeItemHandler = (item) => {
+    ctxDispatch({
+      type: "REMOVE_ITEM_FROM_WISHLIST",
+      payload: item,
+    });
   };
 
   return (
-    <Card style={{ height: 500 }}>
+    <Card style={{ height: 520 }}>
       <Link to={`/product/${product._id}`}>
         {" "}
-        <img src={`/images/${product.image}`}  className="card-img-top product-img" />
+        <img
+          src={`/images/${product.image}`}
+          className="card-img-top product-img"
+        />
       </Link>
       <Card.Body className="card-body">
         <Link
@@ -59,8 +68,8 @@ function Product({ product }) {
         <Card.Text>{product.price} $</Card.Text>
         <Card.Text>By: {product.auther}</Card.Text>
         <Card.Text>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Card.Text>
+          <div style={{ display: "flex", justifyContent: "space-around" }}>
+            <Card.Text style={{ marginTop: 10 }}>
               {" "}
               {product.countInStock === 0 ? (
                 <Button variant="light" disabled>
@@ -73,18 +82,40 @@ function Product({ product }) {
                 >
                   Add to cart
                 </Button>
+              )}
+            </Card.Text>
+            <Card.Text>
+              {wishlistItems?.map((item) => item._id).includes(product._id) ? (
+                <Button
+                  variant="link"
+                  onClick={() => removeItemHandler(product)}
+                >
+                  <i
+                    class="bi bi-heart-fill"
+                    style={{
+                      fontSize: "28px",
+                      color: "red",
+                      marginBottom: "10px",
+                    }}
+                  ></i>
+                </Button>
+              ) : (
+                <Button
+                  variant="link"
+                  onClick={() => addToWishlistHandler(product)}
+                >
+                  {" "}
+                  <i
+                    className="bi bi-heart"
+                    style={{
+                      fontSize: "28px",
+                      color: "gray",
+                      marginBottom: "10px",
+                    }}
+                  ></i>
+                </Button>
               )}{" "}
             </Card.Text>{" "}
-            <Button
-              variant="link"
-              onClick={() => addToWishlistHandler(product)}
-            >
-              <FontAwesomeIcon
-                icon={faHeart}
-                color={"red"}
-                style={{ fontSize: 28, marginBottom: 10 }}
-              />
-            </Button>
           </div>
         </Card.Text>
       </Card.Body>
