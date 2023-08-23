@@ -10,7 +10,7 @@ import Button from "react-bootstrap/Button";
 import { toast } from "react-toastify";
 import { getError } from "../utlis";
 import ProductPopup from "../components/Products/ProductPopup";
-import Card from "react-bootstrap/Card";
+
 const reducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {

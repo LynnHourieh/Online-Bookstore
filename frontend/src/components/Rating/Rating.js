@@ -1,6 +1,6 @@
 import React from "react";
 
-function Rating({ rating, numReviews }) {
+function Rating({ rating }) {
   return (
     <div className="rating">
       <span>

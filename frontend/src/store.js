@@ -51,6 +51,7 @@ function reducer(state, action) {
           loading: false,
         },
       };
+      
     case "CART_ADD_ITEM":
       // add to cart
       const newItem = payload;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useEffect, useReducer, useContext } from "react";
 import logger from "use-reducer-logger";
 import axios from "axios";
@@ -14,7 +14,11 @@ import { getError } from "../utlis";
 import Badge from "react-bootstrap/Badge";
 import Rating from "../components/Rating/Rating";
 import { Store } from "../store";
-
+import Feedback from "../components/Feedbacks/Feedback";
+import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
+import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 const reducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
@@ -34,6 +38,12 @@ function ProductScreen() {
     reducer,
     INITAL_STATE
   );
+  const [rating, setRating] = useState(0);
+
+  const handleRatingChange = (newRating) => {
+    setRating(newRating);
+    addRating();
+  };
 
   const navigate = useNavigate();
   //to take title from url use useParams();
@@ -51,11 +61,72 @@ function ProductScreen() {
       }
     };
     fetchData();
-    console.log(_id);
+    //console.log(_id);
   }, [_id]);
-  console.log(product)
+  //console.log(product)
   const { state, dispatch: ctxDispatch } = useContext(Store);
-  const { cart } = state;
+  const { cart, userInfo } = state;
+  //console.log(userInfo)
+  const [text, setText] = useState("");
+
+  const addFeedback = async (e) => {
+    e.preventDefault();
+    const requestBody = {
+      text: text,
+    };
+    try {
+      ctxDispatch({ type: "CREATE_REQUEST" });
+
+      const { data } = await axios.post(
+        `/api/feedback/product/${_id}/user/${userInfo._id}`,
+        requestBody,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: userInfo.token,
+          },
+        }
+      );
+
+      //console.log("data", data);
+      setText("");
+      toast.success("Feedback added successfully");
+      ctxDispatch({ type: "CREATE_SUCCESS" });
+    } catch (err) {
+      console.error("Error adding feedback:", err);
+      toast.error(getError(err));
+      ctxDispatch({ type: "CREATE_FAIL" });
+    }
+  };
+  const addRating = async () => {
+  
+    const requestBody = {
+      rating: rating,
+    };
+    try {
+      ctxDispatch({ type: "CREATE_REQUEST" });
+
+      const { data } = await axios.post(
+        `/api/rating/product/${_id}/user/${userInfo._id}`,
+        requestBody,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: userInfo.token,
+          },
+        }
+      );
+
+      //console.log("data", data);
+      toast.success("Rating added successfully");
+      ctxDispatch({ type: "CREATE_SUCCESS" });
+    } catch (err) {
+      console.error("Error adding rating:", err);
+      toast.error(getError(err));
+      ctxDispatch({ type: "CREATE_FAIL" });
+    }
+  };
+
   const addToCartHandler = async () => {
     const existItem = cart.cartItems.find((x) => x._id === product._id);
     const quantity = existItem ? existItem.quantity + 1 : 1;
@@ -137,18 +208,73 @@ function ProductScreen() {
               </ListGroup>
             </Card.Body>
           </Card>
-          
+          <div>
+            {[1, 2, 3, 4, 5].map((value) => (
+              <FontAwesomeIcon
+                style={{ color: "FFC000" }}
+                key={value}
+                icon={value <= rating ? solidStar : regularStar}
+                onClick={() => handleRatingChange(value)}
+              />
+            ))}
+          </div>
         </Col>
-      </Row><Row>
-      <Col md={6}>Adding feedback</Col>
-      <Col md={5}><h2>Reviews</h2><form>
-  <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">add your feedbacks or notes</label>
-    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"/>
-   
-  </div>
-  <button type="submit" class="btn btn-primary">Submit</button>
-</form></Col>
+      </Row>
+      <Row>
+        {userInfo ? (
+          <Col md={6}>
+            <h2>Reviews</h2>
+            <form encType="multipart/form-data">
+              <div className="mb-3">
+                <label for="exampleInputEmail1" className="form-label">
+                  add your feedbacks or notes
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  name="text"
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                />
+              </div>
+              <button onClick={addFeedback} className="btn btn-primary">
+                Submit
+              </button>
+            </form>
+          </Col>
+        ) : (
+          <Col md={6}>
+            <h2>Reviews</h2>
+            <form encType="multipart/form-data">
+              <div className="mb-3">
+                <label for="exampleInputEmail1" className="form-label">
+                  add your feedbacks or notes
+                </label>
+                <input
+                  disabled
+                  type="text"
+                  className="form-control"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  name="text"
+                  placeholder="Sign in to add your feedback"
+                />
+              </div>
+              <button
+                onClick={addFeedback}
+                className="btn btn-primary"
+                disabled
+              >
+                Submit
+              </button>
+            </form>
+          </Col>
+        )}
+        <Col md={5}>
+          <Feedback productId={product._id} />
+        </Col>
       </Row>
     </div>
   );

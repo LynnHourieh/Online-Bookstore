@@ -57,7 +57,7 @@ const ProductPopup = ({ isOpen, onClose, onSave }) => {
             className="form-control mb-3"
             placeholder="Title"
             value={title}
-            onChange={(e) => setTitle(e.target.value).toUpperCase()}
+            onChange={(e) => setTitle(e.target.value)}
           />
           <div>Description</div>
           <input
