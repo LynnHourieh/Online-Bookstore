@@ -10,7 +10,8 @@ import MessageBox from "../Message/Message";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
-
+import { Store } from "../../store";
+import { toast } from "react-toastify";
 const reducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
@@ -21,36 +22,32 @@ const reducer = (state, action) => {
 
     case "FETCH_FAIL":
       return { ...state, loading: false, error: payload };
-
-    case "Fetch_REQUEST_RATING":
-      return { ...state, loadings: true };
-    case "FETCH_SUCCESS_RATING":
-      return { ...state, ratings: payload, loadings: false };
-    case "FETCH_FAIL_RATING":
-      return { ...state, loadings: false, errors: payload };
+    case "DELETE_SUCCESS":
+      return {
+        ...state,
+        loadingDelete: false,
+        successDelete: true,
+      };
+    case "DELETE_FAIL":
+      return { ...state, loadingDelete: false, successDelete: false };
     default:
       return state;
   }
 };
 function Feedback({ productId }) {
-
-  //const [rating, setRating] = useState(0);
-
-  // const handleRatingChange = (newRating) => {
-  //   setRating(newRating);
-  // };
-
   const INITAL_STATE = {
     loading: true,
     error: "",
-    errors: "",
+    loadingDelete: true,
+    successDelete: false,
     feedback: [],
-    ratings: [],
-    loadings: true,
   };
-  const [{ loading, error, feedback, ratings, loadings }, dispatch] =
-    useReducer(reducer, INITAL_STATE);
- 
+  const [{ loading, error, feedback }, dispatch] = useReducer(
+    reducer,
+    INITAL_STATE
+  );
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const { userInfo } = state;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,23 +60,29 @@ function Feedback({ productId }) {
         dispatch({ type: "FETCH_FAIL", payload: getError(error) });
       }
     };
-    const fetchRating = async () => {
-      dispatch({ type: "FETCH_REQUEST_RATING" });
-      try {
-        const result = await axios.get(`/api/rating/product/${productId}`);
 
-        dispatch({ type: "FETCH_SUCCESS_RATING", payload: result.data });
-      } catch (error) {
-        dispatch({ type: "FETCH_FAIL_RATING", payload: getError(error) });
-      }
-    };
-    fetchRating();
     fetchData();
+  }, [productId, feedback]);
 
-  }, [productId, feedback, ratings]);
+  const deleteFeedback = async (feedbackId) => {
+    try {
+      const { data } = await axios.delete(`/api/feedback/${feedbackId}`, {
+        headers: {
+          Authorization: userInfo.token,
+        },
+      });
 
+      toast.success("Feedback deleted successfully");
+      console.log("Feedback deleted:", data);
+      dispatch({ type: "DELETE_SUCCESS" });
+    } catch (error) {
+      console.error("Error deleting feedback:", error);
+      toast.error(getError(error));
+      dispatch({ type: "DELETE_FAIL" });
+    }
+  };
 
-  return loading && loadings ? (
+  return loading ? (
     <LoadingBox />
   ) : error ? (
     <MessageBox variant="danger">{error}</MessageBox>
@@ -95,19 +98,27 @@ function Feedback({ productId }) {
                   <Row>
                     <Col>{item.user.name}</Col>
                     <Col>{item.text}</Col>
-                    {/* <Col>
+                    <Col>
                       {" "}
                       {[1, 2, 3, 4, 5].map((value) => (
-                         <FontAwesomeIcon
+                        <FontAwesomeIcon
                           style={{ color: "FFC000" }}
                           key={value}
-                          icon={
-                            value <= 1 ? solidStar : regularStar
-                          }
+                          icon={value <= item.rating ? solidStar : regularStar}
                         />
                       ))}
-                    </Col> */}
-                    
+                    </Col>
+                    <Col>
+                      {userInfo._id == item.user._id ? (
+                        <i
+                          className="bi bi-trash"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => deleteFeedback(item._id)}
+                        ></i>
+                      ) : (
+                        ""
+                      )}
+                    </Col>
                   </Row>
                 </ListGroup.Item>
               </ListGroup>

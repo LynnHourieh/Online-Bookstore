@@ -45,7 +45,7 @@ feedbackRouter.post(
   "/product/:productId/user/:userId",isAuth,
   expressAsyncHandler(async (req, res) => {
     try {
-      const { text } = req.body;
+      const { text,rating } = req.body;
       const { productId, userId } = req.params;
 
       // Check if user has existing feedback for this product
@@ -57,12 +57,14 @@ feedbackRouter.post(
       if (existingFeedback) {
         // If existing feedback exists, update it
         existingFeedback.text = text;
+        existingFeedback.rating=rating;
         const updatedFeedback = await existingFeedback.save();
         res.status(200).json(updatedFeedback);
       } else {
         // If no existing feedback, create a new feedback entry
         const newFeedback = new Feedback({
           text,
+          rating:0,
           product: productId,
           user: userId,
         });
@@ -76,17 +78,15 @@ feedbackRouter.post(
     }
   })
 );
-
 feedbackRouter.delete(
-  "/product/:productId/user/:userId",
+  "/:feedbackId",
   expressAsyncHandler(async (req, res) => {
     try {
-      const { productId, userId } = req.params;
+      const { feedbackId } = req.params;
 
-      // Find and delete the user's feedback for the specified product
+      // Find and delete the feedback by its ID
       const deletedFeedback = await Feedback.findOneAndDelete({
-        product: productId,
-        user: userId,
+        _id: feedbackId,
       });
 
       if (deletedFeedback) {

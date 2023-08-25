@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useEffect, useReducer, useContext } from "react";
-import logger from "use-reducer-logger";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import Row from "react-bootstrap/Row";
@@ -39,12 +38,8 @@ function ProductScreen() {
     reducer,
     INITAL_STATE
   );
-  const [rating, setRating] = useState(0);
 
-  const handleRatingChange = (newRating) => {
-    setRating(newRating);
-    addRating(newRating);
-  };
+
 
   const navigate = useNavigate();
   //to take title from url use useParams();
@@ -64,16 +59,22 @@ function ProductScreen() {
     fetchData();
     //console.log(_id);
   }, [_id]);
-  //console.log(product)
+ 
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
-  //console.log(userInfo)
-  const [text, setText] = useState("");
 
+  const [text, setText] = useState("");
+  const[rating,setRating]=useState(0)
+
+  const handleRatingChange = (newRating) => {
+    setRating(newRating);
+   // addFeedback(newRating);
+  };
   const addFeedback = async (e) => {
     e.preventDefault();
     const requestBody = {
       text: text,
+      rating:rating
     };
     try {
       ctxDispatch({ type: "CREATE_REQUEST" });
@@ -88,9 +89,8 @@ function ProductScreen() {
           },
         }
       );
-
-      //console.log("data", data);
       setText("");
+      setRating(0)
       toast.success("Feedback added successfully");
       ctxDispatch({ type: "CREATE_SUCCESS" });
     } catch (err) {
@@ -99,33 +99,7 @@ function ProductScreen() {
       ctxDispatch({ type: "CREATE_FAIL" });
     }
   };
-  const addRating = async (newRating) => {
-  
-    const requestBody = {
-      rating: newRating,
-    };
-    try {
-      ctxDispatch({ type: "CREATE_REQUEST" });
-
-      const { data } = await axios.post(
-        `/api/rating/product/${_id}/user/${userInfo._id}`,
-        requestBody,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: userInfo.token,
-          },
-        }
-      );
-      toast.success("Rating added successfully");
-      ctxDispatch({ type: "CREATE_SUCCESS" });
-    } catch (err) {
-      console.error("Error adding rating:", err);
-      toast.error(getError(err));
-      ctxDispatch({ type: "CREATE_FAIL" });
-    }
-  };
-
+ 
   const addToCartHandler = async () => {
     const existItem = cart.cartItems.find((x) => x._id === product._id);
     const quantity = existItem ? existItem.quantity + 1 : 1;
@@ -207,45 +181,30 @@ function ProductScreen() {
               </ListGroup>
             </Card.Body>
           </Card>
-          <div style={{ display: "flex", marginTop: 35 }}>
-            <h4>Rate this book:</h4>
-            <div>
-              {userInfo
-                ? [1, 2, 3, 4, 5].map((value) => (
-                    <FontAwesomeIcon
-                      style={{
-                        color: "FFC000",
-                        cursor: "pointer",
-                        marginTop: 3,
-                        fontSize: 20,
-                      }}
-                      key={value}
-                      icon={value <= rating ? solidStar : regularStar}
-                      onClick={() => handleRatingChange(value)}
-                    />
-                  ))
-                : [1, 2, 3, 4, 5].map((value) => (
-                    <FontAwesomeIcon
-                      style={{
-                        color: "FFC000",
-                        cursor: "pointer",
-                        marginTop: 3,
-                        fontSize: 20,
-                      }}
-                      key={value}
-                      icon={value <= rating ? solidStar : regularStar}
-                      onClick={() => userInfo && handleRatingChange(value)}
-                    />
-                  ))}
-            </div>
-          </div>
         </Col>
       </Row>
       <Row>
         {userInfo ? (
           <Col md={6}>
-            <h2>Reviews</h2>
             <form encType="multipart/form-data">
+              <div style={{ display: "flex", marginTop: 35 }}>
+                <h4>Rate this book:</h4>
+                <div>
+                  {[1, 2, 3, 4, 5].map((value) => (
+                    <FontAwesomeIcon
+                      style={{
+                        color: "FFC000",
+                        cursor: userInfo ? "pointer" : "default", // Set cursor style based on userInfo
+                        marginTop: 3,
+                        fontSize: 20,
+                      }}
+                      key={value}
+                      icon={value <= rating ? solidStar : regularStar}
+                      onClick={() => userInfo && handleRatingChange(value)} // Apply onClick only if userInfo is true
+                    />
+                  ))}
+                </div>
+              </div>
               <div className="mb-3">
                 <label htmlFor="exampleInputEmail1" className="form-label">
                   add your feedbacks or notes
@@ -260,7 +219,7 @@ function ProductScreen() {
                   onChange={(e) => setText(e.target.value)}
                 />
               </div>
-              <button onClick={addFeedback} className="btn btn-primary">
+              <button onClick={(e)=>addFeedback(e)} className="btn btn-primary">
                 Submit
               </button>
             </form>
