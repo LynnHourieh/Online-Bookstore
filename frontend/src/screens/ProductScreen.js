@@ -19,6 +19,7 @@ import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
+
 const reducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
@@ -42,7 +43,7 @@ function ProductScreen() {
 
   const handleRatingChange = (newRating) => {
     setRating(newRating);
-    addRating();
+    addRating(newRating);
   };
 
   const navigate = useNavigate();
@@ -98,10 +99,10 @@ function ProductScreen() {
       ctxDispatch({ type: "CREATE_FAIL" });
     }
   };
-  const addRating = async () => {
+  const addRating = async (newRating) => {
   
     const requestBody = {
-      rating: rating,
+      rating: newRating,
     };
     try {
       ctxDispatch({ type: "CREATE_REQUEST" });
@@ -116,8 +117,6 @@ function ProductScreen() {
           },
         }
       );
-
-      //console.log("data", data);
       toast.success("Rating added successfully");
       ctxDispatch({ type: "CREATE_SUCCESS" });
     } catch (err) {
@@ -208,15 +207,37 @@ function ProductScreen() {
               </ListGroup>
             </Card.Body>
           </Card>
-          <div>
-            {[1, 2, 3, 4, 5].map((value) => (
-              <FontAwesomeIcon
-                style={{ color: "FFC000" }}
-                key={value}
-                icon={value <= rating ? solidStar : regularStar}
-                onClick={() => handleRatingChange(value)}
-              />
-            ))}
+          <div style={{ display: "flex", marginTop: 35 }}>
+            <h4>Rate this book:</h4>
+            <div>
+              {userInfo
+                ? [1, 2, 3, 4, 5].map((value) => (
+                    <FontAwesomeIcon
+                      style={{
+                        color: "FFC000",
+                        cursor: "pointer",
+                        marginTop: 3,
+                        fontSize: 20,
+                      }}
+                      key={value}
+                      icon={value <= rating ? solidStar : regularStar}
+                      onClick={() => handleRatingChange(value)}
+                    />
+                  ))
+                : [1, 2, 3, 4, 5].map((value) => (
+                    <FontAwesomeIcon
+                      style={{
+                        color: "FFC000",
+                        cursor: "pointer",
+                        marginTop: 3,
+                        fontSize: 20,
+                      }}
+                      key={value}
+                      icon={value <= rating ? solidStar : regularStar}
+                      onClick={() => userInfo && handleRatingChange(value)}
+                    />
+                  ))}
+            </div>
           </div>
         </Col>
       </Row>
@@ -226,7 +247,7 @@ function ProductScreen() {
             <h2>Reviews</h2>
             <form encType="multipart/form-data">
               <div className="mb-3">
-                <label for="exampleInputEmail1" className="form-label">
+                <label htmlFor="exampleInputEmail1" className="form-label">
                   add your feedbacks or notes
                 </label>
                 <input
@@ -249,7 +270,7 @@ function ProductScreen() {
             <h2>Reviews</h2>
             <form encType="multipart/form-data">
               <div className="mb-3">
-                <label for="exampleInputEmail1" className="form-label">
+                <label htmlFor="exampleInputEmail1" className="form-label">
                   add your feedbacks or notes
                 </label>
                 <input

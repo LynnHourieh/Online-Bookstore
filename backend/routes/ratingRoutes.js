@@ -6,9 +6,11 @@ import { isAuth } from "../utils.js";
 
 const ratingRouter = express.Router();
 ratingRouter.get(
-  "/user/:userId",
+  "/product/:productId",
   expressAsyncHandler(async (req, res) => {
-    const rating = await Rating.find({ user: req.params.userId });
+    const rating = await Rating.find({
+      product: req.params.productId,
+    }).populate("user", "name");
     res.send(rating);
   })
 );
