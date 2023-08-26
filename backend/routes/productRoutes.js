@@ -3,6 +3,7 @@ import Product from "../Models/productModel.js";
 import expressAsyncHandler from "express-async-handler";
 import { isAdmin,isAuth } from "../utils.js";
 import multer from "multer";
+import Feedback from "../Models/feedbackModel.js";
 
 
 const storage = multer.diskStorage({
@@ -18,12 +19,20 @@ const upload = multer({ storage: storage });
 
 const productRouter = express.Router();
 productRouter.get("/", async (req, res) => {
-  const products = await Product.find()
-    .sort({ title: 1 }) // Sort by title in ascending alphabetical order
-    .exec();
-;
-  res.send(products);
+  try {
+    const products = await Product.find({})
+
+    //console.log(products); // Log the products to check the feedbacks field
+
+    res.status(200).json(products);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error retrieving products", error: error.message });
+  }
 });
+
+
 
 const PAGE_SIZE = 5;
 
@@ -154,5 +163,6 @@ productRouter.get("/:id", async (req, res) => {
     res.status(404).send({ message: "Product Not Found" });
   }
 });
+
 
 export default productRouter;

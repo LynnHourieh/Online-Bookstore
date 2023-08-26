@@ -13,6 +13,7 @@ function HomeScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const {
     productInfo: { products, loading, error },
+    
   } = state;
 
   useEffect(() => {

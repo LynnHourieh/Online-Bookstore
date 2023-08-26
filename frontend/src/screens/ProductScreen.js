@@ -28,18 +28,26 @@ const reducer = (state, action) => {
       return { ...state, product: payload, loading: false };
     case "FETCH_FAIL":
       return { ...state, loading: false, error: payload };
+    case "CREATE_REQUEST":
+      return { ...state, loadingCreate: true };
+    case "CREATE_SUCCESS":
+      return {
+        ...state,
+        loadingCreate: false,
+     
+      };
+    case "CREATE_FAIL":
+      return { ...state, loadingCreate: false };
     default:
       return state;
   }
 };
 function ProductScreen() {
   const INITAL_STATE = { loading: true, error: "", product: [] };
-  const [{ loading, error, product }, dispatch] = useReducer(
+  const [{ loading, error, product, loadingCreate }, dispatch] = useReducer(
     reducer,
     INITAL_STATE
   );
-
-
 
   const navigate = useNavigate();
   //to take title from url use useParams();
@@ -59,26 +67,30 @@ function ProductScreen() {
     fetchData();
     //console.log(_id);
   }, [_id]);
- 
+
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
 
   const [text, setText] = useState("");
-  const[rating,setRating]=useState(0)
+  const [rating, setRating] = useState(0);
+const[avg,setAvg]=useState(0)
+const handleRatingChange = (newRating) => {
+  console.log("New Rating:", newRating);
+  setRating(newRating);
+};
 
-  const handleRatingChange = (newRating) => {
-    setRating(newRating);
-   // addFeedback(newRating);
-  };
-  const addFeedback = async (e) => {
+const [feedbackAdded, setFeedbackAdded] = useState(false);
+  const addFeedback = async (e,rating) => {
+
     e.preventDefault();
-    const requestBody = {
-      text: text,
-      rating:rating
-    };
-    try {
-      ctxDispatch({ type: "CREATE_REQUEST" });
+console.log("Add Feedback Rating:", rating);
 
+  const requestBody = {
+    text: text,
+    rating: rating, // Use the stored rating value
+  };
+    try {
+      dispatch({ type: "CREATE_REQUEST" });
       const { data } = await axios.post(
         `/api/feedback/product/${_id}/user/${userInfo._id}`,
         requestBody,
@@ -89,17 +101,20 @@ function ProductScreen() {
           },
         }
       );
+      console.log("data", data);
       setText("");
       setRating(0)
       toast.success("Feedback added successfully");
-      ctxDispatch({ type: "CREATE_SUCCESS" });
+      dispatch({ type: "CREATE_SUCCESS" });
+setFeedbackAdded(!feedbackAdded);
+
     } catch (err) {
       console.error("Error adding feedback:", err);
       toast.error(getError(err));
-      ctxDispatch({ type: "CREATE_FAIL" });
+      dispatch({ type: "CREATE_FAIL" });
     }
   };
- 
+
   const addToCartHandler = async () => {
     const existItem = cart.cartItems.find((x) => x._id === product._id);
     const quantity = existItem ? existItem.quantity + 1 : 1;
@@ -114,7 +129,7 @@ function ProductScreen() {
     });
     navigate("/cart");
   };
-  return loading ? (
+  return loading && loadingCreate ? (
     <LoadingBox />
   ) : error ? (
     <MessageBox variant="danger">{error}</MessageBox>
@@ -137,7 +152,7 @@ function ProductScreen() {
             <ListGroup>
               <div className="d-flex">
                 <div>Rating: </div>
-                <Rating rating={product.rating}></Rating>
+                <Rating rating={avg}></Rating>
               </div>
             </ListGroup>
             Auther : {product.auther}
@@ -200,7 +215,10 @@ function ProductScreen() {
                       }}
                       key={value}
                       icon={value <= rating ? solidStar : regularStar}
-                      onClick={() => userInfo && handleRatingChange(value)} // Apply onClick only if userInfo is true
+                      onClick={() => {
+                        userInfo && handleRatingChange(value);
+                        console.log(value);
+                      }} // Apply onClick only if userInfo is true
                     />
                   ))}
                 </div>
@@ -219,7 +237,13 @@ function ProductScreen() {
                   onChange={(e) => setText(e.target.value)}
                 />
               </div>
-              <button onClick={(e)=>addFeedback(e)} className="btn btn-primary">
+              <button
+                onClick={(e) => {
+                  console.log(rating);
+                  addFeedback(e, rating);
+                }}
+                className="btn btn-primary"
+              >
                 Submit
               </button>
             </form>
@@ -253,7 +277,11 @@ function ProductScreen() {
           </Col>
         )}
         <Col md={5}>
-          <Feedback productId={product._id} />
+          <Feedback
+            productId={product._id}
+            feedbackAdded={feedbackAdded}
+            setAvg={setAvg}
+          />
         </Col>
       </Row>
     </div>

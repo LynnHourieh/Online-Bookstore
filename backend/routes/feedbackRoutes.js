@@ -17,18 +17,34 @@ feedbackRouter.get(
 feedbackRouter.get(
   "/product/:productId",
   expressAsyncHandler(async (req, res) => {
-   
-    const feedback = await Feedback.find({ product: req.params.productId })
-      .populate("user", "name")
-      
+    try {
+      const productId = req.params.productId;
 
-    if (feedback) {
-      res.status(200).json(feedback);
-    } else {
-      res.status(404).json({ message: "Feedback not found for the product" });
+      const feedback = await Feedback.find({ product: productId }).populate(
+        "user",
+        "name"
+      );
+
+      if (!feedback || feedback.length === 0) {
+        res.status(404).json({ message: "Feedback not found for the product" });
+        return;
+      }
+
+      const totalRatings = feedback.reduce(
+        (total, item) => total + item.rating,
+        0
+      );
+      const averageRating = totalRatings / feedback.length;
+
+      res.status(200).json({ feedback, averageRating });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Error retrieving feedback", error: error.message });
     }
   })
 );
+
 //get all feedbacks
 feedbackRouter.get(
   "/all",
@@ -64,7 +80,7 @@ feedbackRouter.post(
         // If no existing feedback, create a new feedback entry
         const newFeedback = new Feedback({
           text,
-          rating:0,
+          rating,
           product: productId,
           user: userId,
         });

@@ -17,7 +17,7 @@ function Product({ product }) {
   const {
     wishlist: { wishlistItems },
   } = state;
-  console.log(wishlistItems)
+  //console.log(wishlistItems)
   const addToCartHandler = async (product) => {
     const existItem = cartItems.find((x) => x._id === product._id);
     const quantity = existItem ? existItem.quantity + 1 : 1;
@@ -44,6 +44,7 @@ function Product({ product }) {
       payload: item,
     });
   };
+//console.log(feedback)
 
   return (
     <Card style={{ height: 520 }}>
@@ -63,7 +64,7 @@ function Product({ product }) {
           <Card.Title>{product.title}</Card.Title>
         </Link>
 
-        <Rating rating={product.rating} />
+
 
         <Card.Text>{product.price} $</Card.Text>
         <Card.Text>By: {product.auther}</Card.Text>

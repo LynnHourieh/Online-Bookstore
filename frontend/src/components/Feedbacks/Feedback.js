@@ -2,11 +2,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
-import { useEffect, useReducer, useState, useContext } from "react";
+import { useEffect, useReducer, useContext } from "react";
 import { getError } from "../../utlis";
 import axios from "axios";
 import LoadingBox from "../Loading/Loading";
-import MessageBox from "../Message/Message";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
@@ -34,7 +33,7 @@ const reducer = (state, action) => {
       return state;
   }
 };
-function Feedback({ productId }) {
+function Feedback({ productId, feedbackAdded, setAvg }) {
   const INITAL_STATE = {
     loading: true,
     error: "",
@@ -62,8 +61,9 @@ function Feedback({ productId }) {
     };
 
     fetchData();
-  }, [productId, feedback]);
-
+  }, [productId, feedback, feedbackAdded]);
+  // console.log(feedback);
+setAvg(feedback.averageRating)
   const deleteFeedback = async (feedbackId) => {
     try {
       const { data } = await axios.delete(`/api/feedback/${feedbackId}`, {
@@ -72,9 +72,15 @@ function Feedback({ productId }) {
         },
       });
 
-      toast.success("Feedback deleted successfully");
+      // Update feedback state after successful deletion
+      const updatedFeedback = feedback.feedback.filter(
+        (item) => item._id !== feedbackId
+      );
+      dispatch({ type: "FETCH_SUCCESS", payload: updatedFeedback });
+
       console.log("Feedback deleted:", data);
       dispatch({ type: "DELETE_SUCCESS" });
+      toast.success("Feedback deleted successfully");
     } catch (error) {
       console.error("Error deleting feedback:", error);
       toast.error(getError(error));
@@ -82,15 +88,15 @@ function Feedback({ productId }) {
     }
   };
 
+  // ... (rest of the component)
+
   return loading ? (
     <LoadingBox />
-  ) : error ? (
-    <MessageBox variant="danger">{error}</MessageBox>
   ) : (
     <>
       <h2>Reviews</h2>
-      {feedback ? (
-        feedback?.map((item) => (
+      {feedback.feedback ? (
+        feedback.feedback?.map((item) => (
           <Card key={item._id}>
             <Card.Body>
               <ListGroup variant="flush">
