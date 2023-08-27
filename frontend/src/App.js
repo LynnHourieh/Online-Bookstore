@@ -28,6 +28,8 @@ import ProtectedRoute from "./components/User/ProtectedRoute";
 import AdminRoute from "./components/Admin/AdminRoute";
 import DashboardScreen from "./screens/DashboardScreen";
 import ProductListScreen from "./screens/ProductListScreen";
+import ForgetPasswordScreen from "./screens/ForgetPasswordScreen";
+import ResetPasswordScreen from "./screens/ResetPasswordScreen";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -54,10 +56,10 @@ function App() {
               <i
                 class="bi bi-book"
                 style={{
-                  fontSize: "25px",
+                  fontSize: '25px',
                 }}
-              ></i>{" "}
-              BookStore{" "}
+              ></i>{' '}
+              BookStore{' '}
             </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -70,22 +72,21 @@ function App() {
               <i
                 class="bi bi-heart-fill"
                 style={{
-                  fontSize: "25px",
-                  color: "red",
+                  fontSize: '25px',
+                  color: 'red',
                 }}
               ></i>
               {wishlist.wishlistItems.length > 0 && (
                 <Badge pill bg="primary">
                   {wishlist.wishlistItems.length}
                 </Badge>
-              )}{" "}
+              )}{' '}
             </Link>
             <Link to="/cart" className="nav-link">
-             
               <i
                 class="bi bi-cart"
                 style={{
-                  fontSize: "25px",
+                  fontSize: '25px',
                 }}
               ></i>
               {cart.cartItems.length > 0 && (
@@ -148,6 +149,8 @@ function App() {
             <Route path="/wishlist" element={<WishListScreen />} />
             <Route path="/signin" element={<SigninScreen />} />
             <Route path="/signup" element={<SignupScreen />} />
+            <Route path="/forget-password" element={<ForgetPasswordScreen />} />
+            <Route path="/reset-password/:token" element={<ResetPasswordScreen />} />
             <Route path="/shipping" element={<ShippingAddressScreen />} />
             <Route path="/placeorder" element={<PlaceOrderScreen />} />
             <Route

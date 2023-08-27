@@ -41,7 +41,7 @@ function Feedback({ productId, feedbackAdded, setAvg }) {
     successDelete: false,
     feedback: [],
   };
-  const [{ loading, error, feedback }, dispatch] = useReducer(
+  const [{ loading, error, feedback, loadingDelete }, dispatch] = useReducer(
     reducer,
     INITAL_STATE
   );
@@ -90,7 +90,7 @@ setAvg(feedback.averageRating)
 
   // ... (rest of the component)
 
-  return loading ? (
+  return loading & loadingDelete ? (
     <LoadingBox />
   ) : (
     <>
@@ -115,7 +115,7 @@ setAvg(feedback.averageRating)
                       ))}
                     </Col>
                     <Col>
-                      {userInfo._id == item.user._id ? (
+                      { userInfo && userInfo._id == item.user._id ? (
                         <i
                           className="bi bi-trash"
                           style={{ cursor: "pointer" }}
