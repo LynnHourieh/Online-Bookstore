@@ -60,7 +60,7 @@ export default function OrderScreen() {
       fetchOrder();
     }
   }, [order, userInfo, orderId, navigate]);
- 
+ console.log(order)
   return loading ? (
     <LoadingBox></LoadingBox>
   ) : error ? (
@@ -106,7 +106,7 @@ export default function OrderScreen() {
                         >
                           {item.title} {" "}
                           <img
-                            src={item.image}
+                            src={`/images/${item.image}`}
                             alt={item.title}
                             className="img-fluid rounded img-thumbnail"
                             style={{ height: 200 }}

@@ -6,7 +6,15 @@ import Product from "../Models/productModel.js";
 import { isAuth,isAdmin } from "../utils.js";
 
 const orderRouter = express.Router();
-
+orderRouter.get(
+  '/',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const orders = await Order.find().populate('user');
+    res.send(orders);
+  })
+);
 orderRouter.post(
   "/",
   isAuth,
@@ -92,5 +100,19 @@ orderRouter.get(
   })
 );
 
+orderRouter.delete(
+  '/:id',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id);
+    if (order) {
+      await order.deleteOne(); // Use deleteOne() instead of remove()
+      res.send({ message: 'Order Deleted' });
+    } else {
+      res.status(404).send({ message: 'Order Not Found' });
+    }
+  })
+);
 
 export default orderRouter;

@@ -6,7 +6,29 @@ import { isAuth, isAdmin, generateToken, baseUrl, mailgun } from '../utils.js';
 import jwt from "jsonwebtoken";
 
 const userRouter = express.Router();
- 
+ userRouter.get(
+   '/',
+   isAuth,
+   isAdmin,
+   expressAsyncHandler(async (req, res) => {
+     const users = await User.find({});
+     res.send(users);
+   })
+ );
+
+ userRouter.get(
+   '/:id',
+   isAuth,
+   isAdmin,
+   expressAsyncHandler(async (req, res) => {
+     const user = await User.findById(req.params.id);
+     if (user) {
+       res.send(user);
+     } else {
+       res.status(404).send({ message: 'User Not Found' });
+     }
+   })
+ );
 userRouter.put(
   "/profile",
   isAuth,
@@ -91,6 +113,43 @@ userRouter.post(
         }
       }
     });
+  })
+);
+userRouter.put(
+  '/:id',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+      user.name = req.body.name || user.name;
+      user.email = req.body.email || user.email;
+      user.isAdmin = Boolean(req.body.isAdmin);
+      const updatedUser = await user.save();
+      res.send({ message: 'User Updated', user: updatedUser });
+    } else {
+      res.status(404).send({ message: 'User Not Found' });
+    }
+  })
+);
+//super admin lynngourieh30@gmail.com
+userRouter.delete(
+  '/:id',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const userId = req.params.id;
+    const user = await User.findById(userId);
+    if (user) {
+      if (user.email === 'lynnhourieh30@gmail.com') {
+        res.status(400).send({ message: 'Cannot Delete Admin User' });
+        return;
+      }
+      await User.findByIdAndDelete(userId); // Use findByIdAndDelete to delete the user
+      res.send({ message: 'User Deleted' });
+    } else {
+      res.status(404).send({ message: 'User Not Found' });
+    }
   })
 );
 

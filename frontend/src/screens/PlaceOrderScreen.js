@@ -50,6 +50,7 @@ function PlaceOrderScreen() {
           shippingAddress: cart.shippingAddress,
           itemsPrice: cart.itemsPrice,
           totalPrice: cart.totalPrice,
+          user:userInfo._id
         },
         //for authorization checking the token
         {
@@ -104,7 +105,7 @@ function PlaceOrderScreen() {
                           >
                             {" "}
                             <img
-                              src={item.image}
+                              src={`/images/${item.image}`}
                               alt={item.title}
                               className="img-fluid rounded img-thumbnail"
                               style={{ height: 200 }}

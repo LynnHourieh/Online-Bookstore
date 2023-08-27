@@ -30,6 +30,9 @@ import DashboardScreen from "./screens/DashboardScreen";
 import ProductListScreen from "./screens/ProductListScreen";
 import ForgetPasswordScreen from "./screens/ForgetPasswordScreen";
 import ResetPasswordScreen from "./screens/ResetPasswordScreen";
+import UserListScreen from "./screens/UserListScreen";
+import UserEditScreen from "./screens/UserEditScreen";
+import OrderListScreen from "./screens/OrderListScreen";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -131,7 +134,7 @@ function App() {
                   <NavDropdown.Item>Orders</NavDropdown.Item>
                 </LinkContainer>
                 <NavDropdown.Divider />
-                <LinkContainer to="/admin/user">
+                <LinkContainer to="/admin/users">
                   <NavDropdown.Item>Users</NavDropdown.Item>
                 </LinkContainer>
               </NavDropdown>
@@ -150,7 +153,10 @@ function App() {
             <Route path="/signin" element={<SigninScreen />} />
             <Route path="/signup" element={<SignupScreen />} />
             <Route path="/forget-password" element={<ForgetPasswordScreen />} />
-            <Route path="/reset-password/:token" element={<ResetPasswordScreen />} />
+            <Route
+              path="/reset-password/:token"
+              element={<ResetPasswordScreen />}
+            />
             <Route path="/shipping" element={<ShippingAddressScreen />} />
             <Route path="/placeorder" element={<PlaceOrderScreen />} />
             <Route
@@ -187,6 +193,30 @@ function App() {
                 </AdminRoute>
               }
             />
+            <Route
+              path="/admin/users"
+              element={
+                <AdminRoute>
+                  <UserListScreen />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/user/:id"
+              element={
+                <AdminRoute>
+                  <UserEditScreen />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/order"
+              element={
+                <AdminRoute>
+                  <OrderListScreen />
+                </AdminRoute>
+              }
+            ></Route>
             <Route
               path="/admin/products"
               element={
