@@ -4,6 +4,7 @@ import expressAsyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import { isAuth, isAdmin, generateToken, baseUrl, mailgun } from '../utils.js';
 import jwt from "jsonwebtoken";
+import nodemailer from 'nodemailer'; 
 
 const userRouter = express.Router();
  userRouter.get(
@@ -54,6 +55,47 @@ userRouter.put(
     }
   })
 );
+//FORGET PASSWORD USING MAILGUN
+// userRouter.post(
+//   '/forget-password',
+//   expressAsyncHandler(async (req, res) => {
+//     const user = await User.findOne({ email: req.body.email });
+
+//     if (user) {
+//       const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
+//         expiresIn: '3h',
+//       });
+//       user.resetToken = token;
+//       await user.save();
+
+//       //reset link
+//       console.log(`${baseUrl()}/reset-password/${token}`);
+
+//       mailgun()
+//         .messages()
+//         .send(
+//           {
+//             from: 'OnlineBookstore <me@mg.yourdomain.com>',
+//             to: `${user.name} <${user.email}>`,
+//             subject: `Reset Password`,
+//             html: ` 
+//              <p>Please Click the following link to reset your password:</p> 
+//              <a href="${baseUrl()}/reset-password/${token}"}>Reset Password</a>
+//              `,
+//           },
+//           (error, body) => {
+//             console.log("error",error);
+//             console.log("body",body);
+//           }
+//         );
+//       res.send({ message: 'We sent reset password link to your email.' });
+//     } else {
+//       res.status(404).send({ message: 'User not found' });
+//     }
+//   })
+// );
+
+//FORGET PASSWORD USING NODEMAILER
 userRouter.post(
   '/forget-password',
   expressAsyncHandler(async (req, res) => {
@@ -69,29 +111,38 @@ userRouter.post(
       //reset link
       console.log(`${baseUrl()}/reset-password/${token}`);
 
-      mailgun()
-        .messages()
-        .send(
-          {
-            from: 'OnlineBookstore <me@mg.yourdomain.com>',
-            to: `${user.name} <${user.email}>`,
-            subject: `Reset Password`,
-            html: ` 
-             <p>Please Click the following link to reset your password:</p> 
-             <a href="${baseUrl()}/reset-password/${token}"}>Reset Password</a>
-             `,
-          },
-          (error, body) => {
-            console.log("error",error);
-            console.log("body",body);
-          }
-        );
-      res.send({ message: 'We sent reset password link to your email.' });
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'lynnhourieh30@gmail.com',
+          pass: 'sdrdbltmshcosfgr',
+        },
+      });
+      var mailOptions = {
+        from: 'OnlineBookstore <me@mg.yourdomain.com>',
+        to: `${user.name} <${user.email}>`,
+        subject: `Reset Password`,
+        html: `
+          <p>Please Click the following link to reset your password:</p>
+          <a href="${baseUrl()}/reset-password/${token}">Reset Password</a>
+        `,
+      };
+
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+
+      res.send({ message: 'We sent the reset password link to your email.' });
     } else {
       res.status(404).send({ message: 'User not found' });
     }
   })
 );
+
 userRouter.post(
   '/reset-password',
   expressAsyncHandler(async (req, res) => {
@@ -138,21 +189,19 @@ userRouter.delete(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const userId = req.params.id;
-    const user = await User.findById(userId);
+    const user = await User.findById(req.params.id);
     if (user) {
       if (user.email === 'lynnhourieh30@gmail.com') {
-        res.status(400).send({ message: 'Cannot Delete Admin User' });
+        res.status(400).send({ message: 'Can Not Delete Admin User' });
         return;
       }
-      await User.findByIdAndDelete(userId); // Use findByIdAndDelete to delete the user
+      await user.findByIdAndDelete(req.params);
       res.send({ message: 'User Deleted' });
     } else {
       res.status(404).send({ message: 'User Not Found' });
     }
   })
 );
-
 //expressAsyncHandler is to catch the error while signin
 userRouter.post(
   "/signin",
