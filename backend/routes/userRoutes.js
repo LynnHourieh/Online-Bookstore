@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import { isAuth, isAdmin, generateToken, baseUrl, mailgun } from '../utils.js';
 import jwt from "jsonwebtoken";
 import nodemailer from 'nodemailer'; 
+import twilio from 'twilio';
 
 const userRouter = express.Router();
  userRouter.get(
@@ -94,6 +95,86 @@ userRouter.put(
 //     }
 //   })
 // );
+
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+
+// Simulated storage for verification codes
+const verificationCodes = new Map();
+
+// Generate a random verification code
+function generateVerificationCode() {
+  return Math.floor(1000 + Math.random() * 9000);
+}
+
+userRouter.post(
+  '/request-code',
+  expressAsyncHandler(async (req, res) => {
+    const phoneNumber = req.body.phoneNumber;
+
+    // Generate a verification code
+    const verificationCode = generateVerificationCode();
+
+    // Store the verification code
+    verificationCodes.set(phoneNumber, verificationCode);
+    console.log(verificationCodes);
+
+    // Send the verification code via SMS
+    try {
+      await twilio(accountSid, authToken).messages.create({
+        to: phoneNumber,
+        from: process.env.TWILIO_PHONE_NUMBER,
+        body: `Your verification code: ${verificationCode}`,
+      });
+      res.send({ message: 'Verification code sent successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send({ error: 'Failed to send verification code' });
+    }
+  })
+);
+
+userRouter.post(
+  '/reset-password-code',
+  expressAsyncHandler(async (req, res) => {
+    const phoneNumber = req.body.phoneNumber;
+    const enteredCode = req.body.enteredCode;
+    const newPassword = req.body.newPassword;
+
+    try {
+      // Check if verification code matches
+      const storedCode = verificationCodes.get(phoneNumber);
+      console.log('Stored Code:', storedCode);
+
+      if (storedCode && storedCode == enteredCode) {
+        // Update the password for the user associated with the phone number
+        // You would typically use a database and proper user identification here
+        const user = await User.findOne({ phoneNumber });
+console.log(user)
+        if (user) {
+          // Set the new password and save the user
+          user.password = bcrypt.hashSync(newPassword, 8); // Hash the new password
+          await user.save();
+          // Clear the verification code after successful reset
+          verificationCodes.delete(phoneNumber);
+
+          res.send({ message: 'Password reset successful' });
+        } else {
+          res.status(400).send({ error: 'User not found' });
+        }
+      } else {
+        res.status(400).send({ error: 'Invalid verification code' });
+      }
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .send({ error: 'An error occurred while processing the request' });
+    }
+  })
+);
+
+
 
 //FORGET PASSWORD USING NODEMAILER
 userRouter.post(
