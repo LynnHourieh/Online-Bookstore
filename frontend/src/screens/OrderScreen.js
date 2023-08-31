@@ -27,7 +27,7 @@ function reducer(state, action) {
 }
 export default function OrderScreen() {
   const { state } = useContext(Store);
-  const { userInfo } = state;
+  const { userInfo ,cart} = state;
 
   const params = useParams();
   const { id: orderId } = params;
@@ -60,7 +60,7 @@ export default function OrderScreen() {
       fetchOrder();
     }
   }, [order, userInfo, orderId, navigate]);
- console.log(order)
+ console.log(cart)
   return loading ? (
     <LoadingBox></LoadingBox>
   ) : error ? (
@@ -87,7 +87,7 @@ export default function OrderScreen() {
             <Card.Body>
               <Card.Title>Payment</Card.Title>
               <Card.Text>
-                <strong>Method:</strong> Cash on delivery
+                <strong>Method:</strong> {cart.paymentMethod}
               </Card.Text>
             </Card.Body>
           </Card>
@@ -102,21 +102,25 @@ export default function OrderScreen() {
                       <Col md={6}>
                         <Link
                           to={`/product/${item.id}`}
-                          style={{ textDecoration: "none", color: "black" }}
+                          style={{ textDecoration: 'none', color: 'black' }}
                         >
-                          {item.title} {" "}
+                          {item.title}{' '}
                           <img
                             src={`/images/${item.image}`}
                             alt={item.title}
                             className="img-fluid rounded img-thumbnail"
                             style={{ height: 200 }}
-                          ></img>{" "}
+                          ></img>{' '}
                         </Link>
                       </Col>
-                      <Col md={3}> Quantity: 
-                        <span>{" "}{item.quantity}</span>
+                      <Col md={3}>
+                        {' '}
+                        Quantity:
+                        <span> {item.quantity}</span>
                       </Col>
-                      <Col md={3}>Price:<span>{" "}{item.price}$</span></Col>
+                      <Col md={3}>
+                        Price:<span> {item.price}$</span>
+                      </Col>
                     </Row>
                   </ListGroup.Item>
                 ))}

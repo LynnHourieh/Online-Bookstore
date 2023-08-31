@@ -33,6 +33,7 @@ import ResetPasswordScreen from "./screens/ResetPasswordScreen";
 import UserListScreen from "./screens/UserListScreen";
 import UserEditScreen from "./screens/UserEditScreen";
 import OrderListScreen from "./screens/OrderListScreen";
+import PaymentScreen from "./screens/PaymentScreen";
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -158,6 +159,7 @@ function App() {
               element={<ResetPasswordScreen />}
             />
             <Route path="/shipping" element={<ShippingAddressScreen />} />
+            <Route path="/payment" element={<PaymentScreen />} />
             <Route path="/placeorder" element={<PlaceOrderScreen />} />
             <Route
               path="/order/:id"

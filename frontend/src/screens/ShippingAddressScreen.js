@@ -44,7 +44,8 @@ export default function ShippingAddressScreen() {
         country,
       })
     );
-    navigate("/placeorder");
+    // navigate("/placeorder");
+      navigate('/payment');
   };
   //to prevent navigating to shipping component while signout
   //then direct it again to shipping component

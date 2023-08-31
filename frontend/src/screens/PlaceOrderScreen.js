@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { getError } from "../utlis";
 import { Store } from "../store";
 import LoadingBox from "../components/Loading/Loading";
+import CartScreen from "./CartScreen";
 
 const reducer = (state, action) => {
   const { type, payload } = action;
@@ -35,7 +36,7 @@ function PlaceOrderScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
   console.log(cart);
-  const { cartItems, shippingAddress } = cart;
+  const { cartItems, shippingAddress,paymentMethod } = cart;
   const total = cartItems.reduce((a, c) => a + c.price * c.quantity, 0);
   const subtotal = cartItems.reduce((a, c) => a + c.quantity, 0);
   cart.itemsPrice = cartItems.reduce((a, c) => a + c.quantity * c.price, 0);
@@ -50,6 +51,7 @@ function PlaceOrderScreen() {
           shippingAddress: cart.shippingAddress,
           itemsPrice: cart.itemsPrice,
           totalPrice: cart.totalPrice,
+          paymentMethod:cart.paymentMethod,
           user:userInfo._id
         },
         //for authorization checking the token
@@ -62,6 +64,8 @@ function PlaceOrderScreen() {
       ctxDispatch({ type: "CART_CLEAR" });
       dispatch({ type: "CREATE_SUCCESS" });
       localStorage.removeItem("cartItems");
+     
+
       navigate(`/order/${data.order._id}`);
     } catch (err) {
       dispatch({ type: "CREATE_FAIL" });
@@ -70,7 +74,7 @@ function PlaceOrderScreen() {
   };
   return (
     <div>
-      <CheckoutSteps step1 step2 step3 />
+      <CheckoutSteps step1 step2 step3 step4 />
 
       <title>Preview Order</title>
 
@@ -89,7 +93,15 @@ function PlaceOrderScreen() {
               <Link to="/shipping">Edit</Link>
             </Card.Body>
           </Card>
-
+          <Card className="mb-3">
+            <Card.Body>
+              <Card.Title>Payment</Card.Title>
+              <Card.Text>
+                <strong>Type:</strong> {cart.paymentMethod}
+              </Card.Text>
+              <Link to="/payment">Edit</Link>
+            </Card.Body>
+          </Card>
           <Card className="mb-3">
             <Card.Body>
               <Card.Title>Books</Card.Title>
@@ -101,16 +113,16 @@ function PlaceOrderScreen() {
                         <strong>
                           <Link
                             to={`/product/${item._id}`}
-                            style={{ textDecoration: "none", color: "black" }}
+                            style={{ textDecoration: 'none', color: 'black' }}
                           >
-                            {" "}
+                            {' '}
                             <img
                               src={`/images/${item.image}`}
                               alt={item.title}
                               className="img-fluid rounded img-thumbnail"
                               style={{ height: 200 }}
                             ></img>
-                            {"  "}
+                            {'  '}
                             {item.title}
                           </Link>
                         </strong>

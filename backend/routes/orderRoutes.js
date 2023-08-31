@@ -26,6 +26,7 @@ orderRouter.post(
       itemsPrice: req.body.itemsPrice,
       totalPrice: req.body.totalPrice,
       user: req.user._id,
+      paymentMethod: req.body.paymentMethod,
     });
 
     const order = await newOrder.save();

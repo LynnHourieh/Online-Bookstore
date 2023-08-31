@@ -102,7 +102,7 @@ export default function OrderListScreen() {
               <th>USER</th>
               <th>DATE</th>
               <th>TOTAL</th>
-              <th>PAID</th>
+              <th>PAYMENT</th>
               <th>DELIVERED</th>
          
             </tr>
@@ -117,9 +117,7 @@ export default function OrderListScreen() {
                 
 
                 <td>
-                  {order.isDelivered
-                    ? order.deliveredAt.substring(0, 10)
-                    : 'No'}
+                  {order.paymentMethod}
                 </td>
                 <td>
                   <Button

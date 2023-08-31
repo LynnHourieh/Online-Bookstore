@@ -51,6 +51,7 @@ export default function OrderHistoryScreen() {
     };
     fetchData();
   }, [userInfo]);
+  console.log(orders)
   return (
     <div>
       <h1>Order History</h1>
@@ -65,8 +66,8 @@ export default function OrderHistoryScreen() {
               <th>ID</th>
               <th>DATE</th>
               <th>TOTAL</th>
-              <th>PAID</th>
-              
+              <th>PAYMENT</th>
+
               <th>ACTIONS</th>
             </tr>
           </thead>
@@ -75,10 +76,9 @@ export default function OrderHistoryScreen() {
               <tr key={order._id}>
                 <td>{order._id}</td>
                 <td>{order.createdAt}</td>
-                <td>{order.itemsPrice+10}</td>
-                <td>Cash on delivery</td>
-             
-               
+                <td>{order.itemsPrice + 10}</td>
+                <td>{order.paymentMethod}</td>
+
                 <td>
                   <Button
                     type="button"

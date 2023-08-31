@@ -7,6 +7,7 @@ import productRouter from "./routes/productRoutes.js";
 import userRouter from "./routes/userRoutes.js"
 import orderRouter from "./routes/orderRoutes.js";
 import feedbackRouter from "./routes/feedbackRoutes.js";
+import stripeRouter from "./routes/stripeRoute.js"
 
 
 
@@ -31,6 +32,7 @@ app.use("/api/products",productRouter)
 app.use("/api/users", userRouter);
 app.use("/api/orders",orderRouter);
 app.use("/api/feedback", feedbackRouter);
+app.use("/api/stripe",stripeRouter)
 
 
 
