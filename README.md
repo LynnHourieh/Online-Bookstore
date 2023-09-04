@@ -40,6 +40,6 @@ $ npm start
 - Run this on browser: http://localhost:5000/api/seed
 -it will return users and products
 
-### 7. To sign in a user 
--email : User@example.com
+### 7. To sign in as admin 
+-email : Harley@gmail.com
 -password: 123456789
