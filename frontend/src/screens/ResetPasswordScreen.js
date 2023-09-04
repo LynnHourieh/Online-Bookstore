@@ -24,7 +24,7 @@ export default function ResetPasswordScreen() {
       navigate('/');
     }
   }, [navigate, userInfo, token]);
-console.log(password)
+//console.log(password)
   const submitHandler = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {

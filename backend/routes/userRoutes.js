@@ -6,6 +6,9 @@ import { isAuth, isAdmin, generateToken, baseUrl, mailgun } from '../utils.js';
 import jwt from "jsonwebtoken";
 import nodemailer from 'nodemailer'; 
 import twilio from 'twilio';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 const userRouter = express.Router();
  userRouter.get(
@@ -276,13 +279,14 @@ userRouter.delete(
         res.status(400).send({ message: 'Can Not Delete Admin User' });
         return;
       }
-      await user.findByIdAndDelete(req.params);
+      await User.findByIdAndDelete(req.params.id); // Use User model here
       res.send({ message: 'User Deleted' });
     } else {
       res.status(404).send({ message: 'User Not Found' });
     }
   })
 );
+
 //expressAsyncHandler is to catch the error while signin
 userRouter.post(
   "/signin",

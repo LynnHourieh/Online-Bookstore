@@ -1,13 +1,12 @@
-
 import express from 'express';
 import stripe from 'stripe';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+const stripeSecretKey = process.env.STRIPE_PRIVATE_KEY;
 const stripes = stripe(stripeSecretKey);
 
-const stripeRouter= express.Router();
+const stripeRouter = express.Router();
 
 stripeRouter.post('/create-checkout-session', async (req, res) => {
   try {
@@ -40,4 +39,4 @@ stripeRouter.post('/create-checkout-session', async (req, res) => {
   }
 });
 
-export default stripeRouter
+export default stripeRouter;
