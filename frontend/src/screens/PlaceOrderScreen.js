@@ -37,9 +37,9 @@ function PlaceOrderScreen() {
   const { cart, userInfo } = state;
   console.log(cart);
   const { cartItems, shippingAddress,paymentMethod } = cart;
-  const total = cartItems.reduce((a, c) => a + c.price * c.quantity, 0);
+  const total = cartItems.reduce((a, c) => a + c.price * c.quantity, 0)/100;
   const subtotal = cartItems.reduce((a, c) => a + c.quantity, 0);
-  cart.itemsPrice = cartItems.reduce((a, c) => a + c.quantity * c.price, 0);
+  cart.itemsPrice = cartItems.reduce((a, c) => a + c.quantity * c.price, 0)/100;
   cart.totalPrice = cart.itemsPrice + 10;
   const placeOrderHandler = async () => {
     try {
@@ -131,7 +131,7 @@ function PlaceOrderScreen() {
                         Quantity :<span>{item.quantity}</span>
                       </Col>
                       <Col md={3}>
-                        Price : <span>${item.price}</span>
+                        Price : <span>${item.price/100}</span>
                       </Col>
                     </Row>
                   </ListGroup.Item>

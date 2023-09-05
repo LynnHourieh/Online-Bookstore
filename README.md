@@ -12,6 +12,7 @@ git clone https://github.com/LynnHourieh/Online-Bookstore.git
 
 ### 2.Create .env file
 
+
 duplicate .env.example in backend folder and rename it to .env
 
 ### 3. Setup MongoDB

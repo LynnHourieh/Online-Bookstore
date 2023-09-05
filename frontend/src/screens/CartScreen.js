@@ -99,7 +99,7 @@ const checkoutHandler=()=>{
                         <i className="fas fa-plus-circle"></i>
                       </Button>
                     </Col>
-                    <Col md={2}>${item.price}</Col>
+                    <Col md={2}>${item.price/100}</Col>
 
                     <Col md={2}>
                       <Button
@@ -123,7 +123,7 @@ const checkoutHandler=()=>{
                   <h3>
                     Subtotal ({cartItems.reduce((a, c) => a + c.quantity, 0)}{" "}
                     items) : $
-                    {cartItems.reduce((a, c) => a + c.price * c.quantity, 0)}
+                    {cartItems.reduce((a, c) => a + c.price * c.quantity, 0)/100}
                   </h3>
                 </ListGroup.Item>
                 <ListGroup.Item>

@@ -99,27 +99,27 @@ export default function OrderScreen() {
                 {order.orderItems.map((item) => (
                   <ListGroup.Item key={item._id}>
                     <Row className="align-items-center">
-                      <Col md={6}>
+                      <Col md={4}>
                         <Link
                           to={`/product/${item.id}`}
                           style={{ textDecoration: 'none', color: 'black' }}
                         >
-                          {item.title}{' '}
-                          <img
-                            src={`/images/${item.image}`}
-                            alt={item.title}
-                            className="img-fluid rounded img-thumbnail"
-                            style={{ height: 200 }}
-                          ></img>{' '}
+                          {item.title}
                         </Link>
                       </Col>
-                      <Col md={3}>
-                        {' '}
-                        Quantity:
-                        <span> {item.quantity}</span>
+                      <Col md={4}>
+                        <img
+                          src={`/images/${item.image}`}
+                          alt={item.title}
+                          className="img-fluid rounded img-thumbnail"
+                          style={{ height: 200,width:150 }}
+                        />
                       </Col>
-                      <Col md={3}>
-                        Price:<span> {item.price}$</span>
+                      <Col md={2}>
+                        Quantity: <span>{item.quantity}</span>
+                      </Col>
+                      <Col md={2}>
+                        Price: <span>{item.price}$</span>
                       </Col>
                     </Row>
                   </ListGroup.Item>

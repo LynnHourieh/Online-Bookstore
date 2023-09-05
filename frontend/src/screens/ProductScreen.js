@@ -164,7 +164,7 @@ console.log(product)
                 <ListGroup.Item>
                   <Row>
                     <Col>Price:</Col>
-                    <Col>{product.price}$</Col>
+                    <Col>{product.price/100}$</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>

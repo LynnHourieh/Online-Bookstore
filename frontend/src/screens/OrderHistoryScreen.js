@@ -76,7 +76,7 @@ export default function OrderHistoryScreen() {
               <tr key={order._id}>
                 <td>{order._id}</td>
                 <td>{order.createdAt}</td>
-                <td>{order.itemsPrice + 10}</td>
+                <td>{order.itemsPrice/100 + 10}</td>
                 <td>{order.paymentMethod}</td>
 
                 <td>

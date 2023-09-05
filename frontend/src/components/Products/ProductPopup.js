@@ -87,7 +87,7 @@ const ProductPopup = ({ isOpen, onClose, onSave }) => {
           <input
             type="number"
             className="form-control mb-3"
-            placeholder="Price"
+            placeholder="Set price in cents"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />

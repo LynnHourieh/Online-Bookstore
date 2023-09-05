@@ -2,12 +2,9 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
-import Rating from "../Rating/Rating";
 import axios from "axios";
 import { Store } from "../../store";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { toast } from "react-toastify";
+
 
 function Product({ product }) {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -66,7 +63,7 @@ function Product({ product }) {
 
 
 
-        <Card.Text>{product.price} $</Card.Text>
+        <Card.Text>{product.price/100} $</Card.Text>
         <Card.Text>By: {product.auther}</Card.Text>
         <Card.Text>
           <div style={{ display: "flex", justifyContent: "space-around" }}>

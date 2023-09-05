@@ -22,8 +22,6 @@ productRouter.get("/", async (req, res) => {
   try {
     const products = await Product.find({})
 
-    //console.log(products); // Log the products to check the feedbacks field
-
     res.status(200).json(products);
   } catch (error) {
     res
@@ -34,7 +32,7 @@ productRouter.get("/", async (req, res) => {
 
 
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 4;
 
 productRouter.get(
   "/admin",
@@ -163,6 +161,25 @@ productRouter.get("/:id", async (req, res) => {
     res.status(404).send({ message: "Product Not Found" });
   }
 });
+
+productRouter.delete(
+  '/:id',
+  isAuth,
+  isAdmin, // Your isAdmin middleware
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+
+      if (!deletedProduct) {
+        res.status(404).json({ message: 'Product not found' });
+      } else {
+        res.status(204).send();
+      }
+    } catch (error) {
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
+  })
+);
 
 
 export default productRouter;
