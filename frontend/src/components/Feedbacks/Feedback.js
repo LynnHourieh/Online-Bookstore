@@ -102,27 +102,27 @@ setAvg(feedback.averageRating)
               <ListGroup variant="flush">
                 <ListGroup.Item>
                   <Row>
-                    <Col>{item.user.name}</Col>
-                    <Col>{item.text}</Col>
-                    <Col>
-                      {" "}
+                    <Col md={2}>{item.user.name}</Col>
+                    <Col md={3}>{item.text}</Col>
+                    <Col md={4}>
+                      {' '}
                       {[1, 2, 3, 4, 5].map((value) => (
                         <FontAwesomeIcon
-                          style={{ color: "FFC000" }}
+                          style={{ color: 'FFC000' }}
                           key={value}
                           icon={value <= item.rating ? solidStar : regularStar}
                         />
                       ))}
                     </Col>
-                    <Col>
-                      { userInfo && userInfo._id == item.user._id ? (
+                    <Col md={2}>
+                      {userInfo && userInfo._id == item.user._id ? (
                         <i
                           className="bi bi-trash"
-                          style={{ cursor: "pointer" }}
+                          style={{ cursor: 'pointer' }}
                           onClick={() => deleteFeedback(item._id)}
                         ></i>
                       ) : (
-                        ""
+                        ''
                       )}
                     </Col>
                   </Row>

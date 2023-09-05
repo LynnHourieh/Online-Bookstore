@@ -32,6 +32,7 @@ productRouter.get("/", async (req, res) => {
 
 
 
+
 const PAGE_SIZE = 4;
 
 productRouter.get(
@@ -180,6 +181,44 @@ productRouter.delete(
     }
   })
 );
+productRouter.put(
+  '/:id', // Include the product ID in the route path
+  isAuth,
+  isAdmin,
+  upload.single('ProductImage'),
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const productId = req.params.id; // Get the product ID from the route params
+
+      // Find the existing product by ID
+      const existingProduct = await Product.findById(productId);
+
+      if (!existingProduct) {
+        res.status(404).json({ message: 'Product not found' });
+        return;
+      }
+
+      // Update the product properties with the new data
+      existingProduct.image = req.file.originalname;
+      existingProduct.title = req.body.title;
+      existingProduct.price = req.body.price;
+      existingProduct.auther = req.body.auther;
+      existingProduct.countInStock = req.body.countInStock;
+      existingProduct.description = req.body.description;
+      existingProduct.rating = req.body.rating;
+      existingProduct.genre = req.body.genre;
+
+      // Save the updated product
+      const updatedProduct = await existingProduct.save();
+      res.json(updatedProduct);
+    } catch (error) {
+      res
+        .status(400)
+        .json({ message: 'Error updating product', error: error.message });
+    }
+  })
+);
+
 
 
 export default productRouter;

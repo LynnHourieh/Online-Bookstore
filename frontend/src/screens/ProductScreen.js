@@ -137,6 +137,7 @@ console.log(product)
             className="img-large"
             src={`/images/${product.image}`}
             alt={product.name}
+            style={{ height: 400, weight: 400 }}
           />
         </Col>
         <Col md={5}>
@@ -164,7 +165,7 @@ console.log(product)
                 <ListGroup.Item>
                   <Row>
                     <Col>Price:</Col>
-                    <Col>{product.price/100}$</Col>
+                    <Col>{product.price / 100}$</Col>
                   </Row>
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -175,6 +176,11 @@ console.log(product)
                         <Badge bg="success">In Stock</Badge>
                       ) : (
                         <Badge bg="danger">Unavailable</Badge>
+                      )}
+                      {product.countInStock < 5 ? (
+                        <p style={{color:"red"}}>Low stock: only {product.countInStock} left</p>
+                      ) : (
+                        ''
                       )}
                     </Col>
                   </Row>

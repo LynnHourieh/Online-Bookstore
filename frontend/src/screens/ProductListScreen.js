@@ -10,6 +10,7 @@ import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { getError } from '../utlis';
 import ProductPopup from '../components/Products/ProductPopup';
+import EditProductPopup from '../components/Products/EditProductPopup';
 
 const reducer = (state, action) => {
   const { type, payload } = action;
@@ -19,7 +20,7 @@ const reducer = (state, action) => {
     case 'FETCH_SUCCESS':
       return {
         ...state,
-        updatedProduct:payload,
+        updatedProduct: payload,
         allproducts: payload.countProducts,
         products: payload.products,
         page: payload.page,
@@ -54,6 +55,14 @@ const reducer = (state, action) => {
 
 export default function ProductListScreen() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [isPopupEdit, setIsPopupEdit] = useState(false);
+  const openEditPopup = () => {
+    setIsPopupEdit(true);
+  };
+
+  const closeEditPopup = () => {
+    setIsPopupEdit(false);
+  };
 
   const openPopup = () => {
     setIsPopupOpen(true);
@@ -64,7 +73,15 @@ export default function ProductListScreen() {
   };
 
   const [
-    { loading, error, products, pages, loadingCreate, allproducts,loadingDelete },
+    {
+      loading,
+      error,
+      products,
+      pages,
+      loadingCreate,
+      allproducts,
+      loadingDelete,
+    },
     dispatch,
   ] = useReducer(reducer, {
     loading: true,
@@ -113,6 +130,28 @@ export default function ProductListScreen() {
       }
     }
   };
+   const handleEditProduct = async (formData) => {
+     
+       try {
+         console.log('Sending product data:', formData);
+         dispatch({ type: 'CREATE_REQUEST' });
+
+         const { data } = await axios.post(`/api/products/${data.product._id}`, formData, {
+           method: 'PUT',
+           headers: { Authorization: userInfo.token },
+         });
+
+         console.log('Product created:', data.product);
+         toast.success('Product created successfully');
+         dispatch({ type: 'CREATE_SUCCESS' });
+         navigate(`/admin/product/${data.product._id}`);
+       } catch (err) {
+         console.error('Error creating product:', err);
+         toast.error(getError(err));
+         dispatch({ type: 'CREATE_FAIL' });
+       }
+     
+   };
   const deleteHandler = async (product) => {
     if (window.confirm('Are you sure to delete?')) {
       try {
@@ -120,10 +159,10 @@ export default function ProductListScreen() {
         await axios.delete(`/api/products/${product._id}`, {
           headers: { Authorization: userInfo.token },
         });
-         const updatedProduct = products.filter(
-           (item) => item._id !== product._id
-         );
-         dispatch({ type: 'FETCH_SUCCESS', payload: updatedProduct });
+        const updatedProduct = products.filter(
+          (item) => item._id !== product._id
+        );
+        dispatch({ type: 'FETCH_SUCCESS', payload: updatedProduct });
 
         toast.success('product deleted successfully');
         dispatch({ type: 'DELETE_SUCCESS' });
@@ -171,13 +210,13 @@ export default function ProductListScreen() {
               <tr>
                 <th>ID</th>
                 <th>NAME</th>
-                <th>AUTHOR</th>
+                <th>AUTHOR</th> <th>GENRE</th>
                 <th>PRICE</th>
-                <th>COUNT IN STUCK</th>
+                <th>COUNT</th>
                 <th>IMAGE</th>
                 <th></th>
                 <th></th>
-             
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -185,12 +224,12 @@ export default function ProductListScreen() {
                 <tr key={product._id}>
                   <td>{product._id}</td>
                   <td>{product.title}</td>
-                  <td>{product.auther}</td>
+                  <td>{product.auther}</td> <td>{product.genre}</td>
                   <td>{product.price / 1000}$</td>
                   <td>{product.countInStock}</td>
                   <td>
                     <img
-                      style={{ height: 90 ,weidth:90}}
+                      style={{ height: 90, weidth: 90 }}
                       src={`/images/${product.image}`}
                     />
                   </td>
@@ -209,12 +248,25 @@ export default function ProductListScreen() {
                     <Button
                       type="button"
                       variant="light"
-                      onClick={() => {
-                        navigate(`//${order._id}`);
-                      }}
+                      onClick={openEditPopup}
                     >
                       Edit
                     </Button>{' '}
+                  </td>
+                  <EditProductPopup
+                    isOpen={isPopupEdit}
+                    onClose={closeEditPopup}
+                    onSave={handleEditProduct}
+                    productId={product._id}
+                    productTitle={product.title}
+                    productAuther={product.auther}
+                    productGenre={product.genre}
+                    productPrice={product.price}
+                    productCountInStock={product.countInStock}
+                    productImage={product.image}
+                    productDescription={product.description}
+                  />
+                  <td>
                     <Button
                       type="button"
                       variant="light"
@@ -223,8 +275,6 @@ export default function ProductListScreen() {
                       Delete
                     </Button>
                   </td>
-
-               
                 </tr>
               ))}
             </tbody>
