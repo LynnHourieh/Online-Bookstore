@@ -3,7 +3,7 @@ import Product from "../Models/productModel.js";
 import expressAsyncHandler from "express-async-handler";
 import { isAdmin,isAuth } from "../utils.js";
 import multer from "multer";
-import Feedback from "../Models/feedbackModel.js";
+
 
 
 const storage = multer.diskStorage({
@@ -70,7 +70,6 @@ productRouter.post(
         auther: req.body.auther, 
         countInStock: req.body.countInStock,
         description: req.body.description,
-        rating: req.body.rating,
         genre:req.body.genre
       });
 
@@ -182,33 +181,44 @@ productRouter.delete(
   })
 );
 productRouter.put(
-  '/:id', // Include the product ID in the route path
+  '/:id',
   isAuth,
   isAdmin,
   upload.single('ProductImage'),
   expressAsyncHandler(async (req, res) => {
     try {
-      const productId = req.params.id; // Get the product ID from the route params
-
-      // Find the existing product by ID
+      const productId = req.params.id;
       const existingProduct = await Product.findById(productId);
 
       if (!existingProduct) {
-        res.status(404).json({ message: 'Product not found' });
-        return;
+        return res.status(404).json({ message: 'Product not found' });
       }
 
-      // Update the product properties with the new data
-      existingProduct.image = req.file.originalname;
-      existingProduct.title = req.body.title;
-      existingProduct.price = req.body.price;
-      existingProduct.auther = req.body.auther;
-      existingProduct.countInStock = req.body.countInStock;
-      existingProduct.description = req.body.description;
-      existingProduct.rating = req.body.rating;
-      existingProduct.genre = req.body.genre;
+      // Validate and update product properties
+      if (req.body.title) {
+        existingProduct.title = req.body.title;
+      }
+      if (!isNaN(req.body.price)) {
+        existingProduct.price = req.body.price;
+      }
+      if (req.body.auther) {
+        existingProduct.auther = req.body.auther;
+      }
+      if (!isNaN(req.body.countInStock)) {
+        existingProduct.countInStock = req.body.countInStock;
+      }
+      if (req.body.description) {
+        existingProduct.description = req.body.description;
+      }
+      if (req.body.genre) {
+        existingProduct.genre = req.body.genre;
+      }
 
-      // Save the updated product
+      // Update the image if a new one was uploaded
+      if (req.file) {
+        existingProduct.image = req.file.originalname;
+      }
+
       const updatedProduct = await existingProduct.save();
       res.json(updatedProduct);
     } catch (error) {
@@ -218,6 +228,7 @@ productRouter.put(
     }
   })
 );
+
 
 
 

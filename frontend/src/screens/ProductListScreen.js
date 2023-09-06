@@ -10,7 +10,7 @@ import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import { getError } from '../utlis';
 import ProductPopup from '../components/Products/ProductPopup';
-import EditProductPopup from '../components/Products/EditProductPopup';
+
 
 const reducer = (state, action) => {
   const { type, payload } = action;
@@ -55,14 +55,7 @@ const reducer = (state, action) => {
 
 export default function ProductListScreen() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isPopupEdit, setIsPopupEdit] = useState(false);
-  const openEditPopup = () => {
-    setIsPopupEdit(true);
-  };
-
-  const closeEditPopup = () => {
-    setIsPopupEdit(false);
-  };
+ 
 
   const openPopup = () => {
     setIsPopupOpen(true);
@@ -130,28 +123,7 @@ export default function ProductListScreen() {
       }
     }
   };
-   const handleEditProduct = async (formData) => {
-     
-       try {
-         console.log('Sending product data:', formData);
-         dispatch({ type: 'CREATE_REQUEST' });
-
-         const { data } = await axios.post(`/api/products/${data.product._id}`, formData, {
-           method: 'PUT',
-           headers: { Authorization: userInfo.token },
-         });
-
-         console.log('Product created:', data.product);
-         toast.success('Product created successfully');
-         dispatch({ type: 'CREATE_SUCCESS' });
-         navigate(`/admin/product/${data.product._id}`);
-       } catch (err) {
-         console.error('Error creating product:', err);
-         toast.error(getError(err));
-         dispatch({ type: 'CREATE_FAIL' });
-       }
-     
-   };
+ 
   const deleteHandler = async (product) => {
     if (window.confirm('Are you sure to delete?')) {
       try {
@@ -248,24 +220,13 @@ export default function ProductListScreen() {
                     <Button
                       type="button"
                       variant="light"
-                      onClick={openEditPopup}
+                      onClick={() => {
+                        navigate(`/admin/product/${product._id}`);
+                      }}
                     >
                       Edit
                     </Button>{' '}
                   </td>
-                  <EditProductPopup
-                    isOpen={isPopupEdit}
-                    onClose={closeEditPopup}
-                    onSave={handleEditProduct}
-                    productId={product._id}
-                    productTitle={product.title}
-                    productAuther={product.auther}
-                    productGenre={product.genre}
-                    productPrice={product.price}
-                    productCountInStock={product.countInStock}
-                    productImage={product.image}
-                    productDescription={product.description}
-                  />
                   <td>
                     <Button
                       type="button"

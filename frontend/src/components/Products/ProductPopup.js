@@ -5,7 +5,7 @@ const ProductPopup = ({ isOpen, onClose, onSave }) => {
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState(0);
   const [imageFile, setImageFile] = useState("");
-  const [rating, setRating] = useState(0);
+
   const [countInStock, setCountInStock] = useState(0);
   const [auther, setAuther] = useState("");
   const [genre, setGenre] = useState("");
@@ -17,7 +17,7 @@ const ProductPopup = ({ isOpen, onClose, onSave }) => {
     formData.append("title", title);
     formData.append("price", price);
     formData.append("ProductImage", imageFile);
-    formData.append("rating", rating);
+
     formData.append("countInStock", countInStock);
     formData.append("genre", genre);
     formData.append("auther", auther);
