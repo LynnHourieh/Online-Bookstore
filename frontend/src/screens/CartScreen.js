@@ -71,7 +71,7 @@ const checkoutHandler=()=>{
                         to={`/product/${item._id}`}
                       >
                         <img
-                          src={`/images/${item.image}`}
+                          src={`/images/${item.images[0].url}`}
                           alt={item.name}
                           className="img-fluid rounded img-thumbnail"
                         ></img>{" "}

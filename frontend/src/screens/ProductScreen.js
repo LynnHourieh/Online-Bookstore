@@ -143,7 +143,84 @@ function ProductScreen() {
               style={{ height: 300, weight: 300 }}
             />
           )}
+
+          {userInfo ? (
+            <form encType="multipart/form-data">
+              <div style={{ display: 'flex', marginTop: 35 }}>
+                <h4>Rate this book:</h4>
+                <div>
+                  {[1, 2, 3, 4, 5].map((value) => (
+                    <FontAwesomeIcon
+                      style={{
+                        color: 'FFC000',
+                        cursor: userInfo ? 'pointer' : 'default', // Set cursor style based on userInfo
+                        marginTop: 3,
+                        fontSize: 20,
+                      }}
+                      key={value}
+                      icon={value <= rating ? solidStar : regularStar}
+                      onClick={() => {
+                        userInfo && handleRatingChange(value);
+                        console.log(value);
+                      }} // Apply onClick only if userInfo is true
+                    />
+                  ))}
+                </div>
+              </div>
+              <div className="mb-3">
+                <label htmlFor="exampleInputEmail1" className="form-label">
+                  add your feedbacks or notes
+                </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="exampleInputEmail1"
+                  aria-describedby="emailHelp"
+                  name="text"
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                />
+              </div>
+              <button
+                onClick={(e) => {
+                  console.log(rating);
+                  addFeedback(e, rating);
+                }}
+                className="btn btn-primary"
+              >
+                Submit
+              </button>
+            </form>
+          ) : (
+            <Col md={6}>
+              <h2>Reviews</h2>
+              <form encType="multipart/form-data">
+                <div className="mb-3">
+                  <label htmlFor="exampleInputEmail1" className="form-label">
+                    add your feedbacks or notes
+                  </label>
+                  <input
+                    disabled
+                    type="text"
+                    className="form-control"
+                    id="exampleInputEmail1"
+                    aria-describedby="emailHelp"
+                    name="text"
+                    placeholder="Sign in to add your feedback"
+                  />
+                </div>
+                <button
+                  onClick={addFeedback}
+                  className="btn btn-primary"
+                  disabled
+                >
+                  Submit
+                </button>
+              </form>
+            </Col>
+          )}
         </Col>
+
         <Col md={5}>
           <ListGroup variant="flush">
             <ListGroup.Item>
@@ -175,6 +252,7 @@ function ProductScreen() {
                           variant="light"
                         >
                           <Card.Img
+                          style={{height:100,width:100}}
                             variant="top"
                             className="enlarge-on-hover"
                             src={`/images/${x.url}`}
@@ -233,90 +311,14 @@ function ProductScreen() {
         </Col>
       </Row>
       <Row>
-        {userInfo ? (
-          <Col md={6}>
-            <form encType="multipart/form-data">
-              <div style={{ display: 'flex', marginTop: 35 }}>
-                <h4>Rate this book:</h4>
-                <div>
-                  {[1, 2, 3, 4, 5].map((value) => (
-                    <FontAwesomeIcon
-                      style={{
-                        color: 'FFC000',
-                        cursor: userInfo ? 'pointer' : 'default', // Set cursor style based on userInfo
-                        marginTop: 3,
-                        fontSize: 20,
-                      }}
-                      key={value}
-                      icon={value <= rating ? solidStar : regularStar}
-                      onClick={() => {
-                        userInfo && handleRatingChange(value);
-                        console.log(value);
-                      }} // Apply onClick only if userInfo is true
-                    />
-                  ))}
-                </div>
-              </div>
-              <div className="mb-3">
-                <label htmlFor="exampleInputEmail1" className="form-label">
-                  add your feedbacks or notes
-                </label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  name="text"
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                />
-              </div>
-              <button
-                onClick={(e) => {
-                  console.log(rating);
-                  addFeedback(e, rating);
-                }}
-                className="btn btn-primary"
-              >
-                Submit
-              </button>
-            </form>
-          </Col>
-        ) : (
-          <Col md={6}>
-            <h2>Reviews</h2>
-            <form encType="multipart/form-data">
-              <div className="mb-3">
-                <label htmlFor="exampleInputEmail1" className="form-label">
-                  add your feedbacks or notes
-                </label>
-                <input
-                  disabled
-                  type="text"
-                  className="form-control"
-                  id="exampleInputEmail1"
-                  aria-describedby="emailHelp"
-                  name="text"
-                  placeholder="Sign in to add your feedback"
-                />
-              </div>
-              <button
-                onClick={addFeedback}
-                className="btn btn-primary"
-                disabled
-              >
-                Submit
-              </button>
-            </form>
-          </Col>
-        )}
-        <Col md={5}>
+        {' '}
+      
           <Feedback
             productId={product._id}
             feedbackAdded={feedbackAdded}
             setAvg={setAvg}
           />
-        </Col>
+
       </Row>
     </div>
   );

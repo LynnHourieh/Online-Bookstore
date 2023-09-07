@@ -12,14 +12,14 @@ import { Store } from '../store';
 import { getError } from '../utlis';
 
 function reducer(state, action) {
-    const{type,payload}=action
+  const { type, payload } = action;
   switch (type) {
     case 'FETCH_REQUEST':
       return { ...state, loading: true, error: '' };
     case 'FETCH_SUCCESS':
-      return { ...state, loading: false, order:payload, error: '' };
+      return { ...state, loading: false, order: payload, error: '' };
     case 'FETCH_FAIL':
-      return { ...state, loading: false, error:payload };
+      return { ...state, loading: false, error: payload };
 
     default:
       return state;
@@ -27,7 +27,7 @@ function reducer(state, action) {
 }
 export default function OrderScreen() {
   const { state } = useContext(Store);
-  const { userInfo ,cart} = state;
+  const { userInfo, cart } = state;
 
   const params = useParams();
   const { id: orderId } = params;
@@ -36,31 +36,31 @@ export default function OrderScreen() {
   const [{ loading, error, order }, dispatch] = useReducer(reducer, {
     loading: true,
     order: {},
-    error: "",
+    error: '',
   });
 
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        dispatch({ type: "FETCH_REQUEST" });
+        dispatch({ type: 'FETCH_REQUEST' });
         const { data } = await axios.get(`/api/orders/${orderId}`, {
           headers: { authorization: userInfo.token },
         });
-        dispatch({ type: "FETCH_SUCCESS", payload: data });
+        dispatch({ type: 'FETCH_SUCCESS', payload: data });
       } catch (err) {
-        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
       }
     };
 
     if (!userInfo) {
-      return navigate("/signin");
+      return navigate('/signin');
     }
     if (!order._id || (order._id && order._id !== orderId)) {
-        //if orderid from url doensn't = to order.is from database them fetch again 
+      //if orderid from url doensn't = to order.is from database them fetch again
       fetchOrder();
     }
   }, [order, userInfo, orderId, navigate]);
- console.log(cart)
+
   return loading ? (
     <LoadingBox></LoadingBox>
   ) : error ? (
@@ -98,6 +98,8 @@ export default function OrderScreen() {
               <ListGroup variant="flush">
                 {order.orderItems.map((item) => (
                   <ListGroup.Item key={item._id}>
+                    {' '}
+                    {console.log(item)}
                     <Row className="align-items-center">
                       <Col md={4}>
                         <Link
@@ -108,18 +110,22 @@ export default function OrderScreen() {
                         </Link>
                       </Col>
                       <Col md={4}>
-                        <img
-                          src={`/images/${item.image}`}
-                          alt={item.title}
-                          className="img-fluid rounded img-thumbnail"
-                          style={{ height: 200,width:150 }}
-                        />
+                      <img
+                            src={`/images/${item.product.images[0].url}`}
+                            alt={item.title}
+                            className="img-fluid rounded img-thumbnail"
+                            style={{ height: 200, width: 150 }}
+                          />
+                         
+                         
+                        
+                       
                       </Col>
                       <Col md={2}>
                         Quantity: <span>{item.quantity}</span>
                       </Col>
                       <Col md={2}>
-                        Price: <span>{item.price}$</span>
+                        Price: <span>{item.price/100}$</span>
                       </Col>
                     </Row>
                   </ListGroup.Item>

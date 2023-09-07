@@ -11,11 +11,12 @@ import { Store } from '../store';
 import { getError } from '../utlis';
 
 const reducer = (state, action) => {
+
   switch (action.type) {
     case 'FETCH_REQUEST':
       return { ...state, loading: true };
     case 'FETCH_SUCCESS':
-      return { ...state, loading: false };
+      return { ...state, loading: false ,data:action.payload};
     case 'FETCH_FAIL':
       return { ...state, loading: false, error: action.payload };
     case 'UPDATE_REQUEST':
@@ -30,7 +31,7 @@ const reducer = (state, action) => {
 };
 
 export default function ProductEditScreen() {
-  const [{ loading, error, loadingUpdate }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, loadingUpdate,data }, dispatch] = useReducer(reducer, {
     loading: true,
     error: '',
   });
@@ -44,13 +45,14 @@ export default function ProductEditScreen() {
 
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState(0);
-  const [imageFile, setImageFile] = useState('');
+  const [imageFile, setImageFile] = useState([]);
   const [countInStock, setCountInStock] = useState(0);
   const [auther, setAuther] = useState('');
   const [genre, setGenre] = useState('');
   const [description, setDescription] = useState('');
   const onChangeFile = (e) => {
-    setImageFile(e.target.files[0]);
+    const selectedFiles=Array.from(e.target.files);
+    setImageFile(selectedFiles);
   };
 
   useEffect(() => {
@@ -62,14 +64,18 @@ export default function ProductEditScreen() {
         });
         setTitle(data.title);
         setPrice(data.price);
-        setImageFile(data.image);
+       [...data.images].map((x)=>{
+          
+          setImageFile(x.url);
+        })
+
         setCountInStock(data.countInStock);
 
         setAuther(data.auther);
         setGenre(data.genre);
         setDescription(data.description);
 
-        dispatch({ type: 'FETCH_SUCCESS' });
+        dispatch({ type: 'FETCH_SUCCESS',payload:data });
       } catch (err) {
         dispatch({
           type: 'FETCH_FAIL',
@@ -91,7 +97,10 @@ export default function ProductEditScreen() {
     formData.append('genre', genre);
     formData.append('description', description);
     formData.append('countInStock', countInStock);
-    formData.append('ProductImage', imageFile);
+    for(let i=0;i<imageFile.length;i++){
+      formData.append('ProductImage', imageFile[i]);
+    }
+    
 
     try {
       dispatch({ type: 'UPDATE_REQUEST' });
@@ -107,6 +116,7 @@ export default function ProductEditScreen() {
       dispatch({ type: 'UPDATE_FAIL' });
     }
   };
+ 
 
   return (
     <Container className="small-container">
@@ -170,17 +180,22 @@ export default function ProductEditScreen() {
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="image">
-            <Form.Label>Image File</Form.Label>
-            <Form.Control
-              value={imageFile}
-              onChange={(e) => setImageFile(e.target.value)}
-              required
+            <Form.Label>Image </Form.Label>
+            <br></br>
+            {data.images.map((x)=> (<img
+            alt={`${x._id}`}
+              style={{ height: 100, weight: 100,padding:2 }}
+              src={`/images/${x.url}`}
             />
+            ))
+           
+           }
+           
+           
           </Form.Group>
           <Form.Group className="mb-3" controlId="imageFile">
             <Form.Label>Upload Image</Form.Label>
-            <Form.Control type="file" onChange={onChangeFile} />
-            
+            <Form.Control type="file" multiple onChange={onChangeFile} />
           </Form.Group>
 
           <div className="mb-3">

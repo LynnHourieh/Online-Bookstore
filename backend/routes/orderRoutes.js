@@ -11,10 +11,20 @@ orderRouter.get(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const orders = await Order.find().populate('user');
+    const orders = await Order.find()
+      .populate({
+        path: 'orderItems.product', // Populate the 'orderItems.product' field
+        populate: {
+          path: 'images', // Populate the 'images' field within 'orderItems.product'
+          model: 'Images', // Model to populate from
+        },
+      })
+      .populate('user', 'images'); // Populate the 'user' field with the 'images' field
+
     res.send(orders);
   })
 );
+
 orderRouter.post(
   "/",
   isAuth,
@@ -92,7 +102,14 @@ orderRouter.get(
   "/:id",
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id).populate({
+        path: 'orderItems.product', // Populate the 'orderItems.product' field
+        populate: {
+          path: 'images', // Populate the 'images' field within 'orderItems.product'
+          model: 'Images', // Model to populate from
+        },
+      })
+      .populate('user', 'images');
     if (order) {
       res.send(order);
     } else {

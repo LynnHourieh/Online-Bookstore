@@ -193,20 +193,20 @@ productRouter.delete(
   })
 );
 productRouter.put(
-  '/:id',
+  '/:id', // Use a parameter to specify the product ID
   isAuth,
   isAdmin,
-  upload.single('ProductImage'),
+  upload.array('ProductImage', 4),
   expressAsyncHandler(async (req, res) => {
     try {
-      const productId = req.params.id;
+      const productId = req.params.id; // Get the product ID from the route parameter
       const existingProduct = await Product.findById(productId);
 
       if (!existingProduct) {
         return res.status(404).json({ message: 'Product not found' });
       }
 
-      // Validate and update product properties
+      // Update the product properties
       if (req.body.title) {
         existingProduct.title = req.body.title;
       }
@@ -226,9 +226,16 @@ productRouter.put(
         existingProduct.genre = req.body.genre;
       }
 
-      // Update the image if a new one was uploaded
-      if (req.file) {
-        existingProduct.image = req.file.originalname;
+      // Update the images if new ones were uploaded
+      if (req.files && req.files.length > 0) {
+        existingProduct.images = [];
+        const images = req.files.map((file) => ({
+          url: `${uniqueFilename}-${file.originalname}`, // Generate a unique URL
+          data: file.buffer,
+          contentType: file.mimetype,
+          originalname: file.originalname,
+        }));
+        existingProduct.images = existingProduct.images.concat(images); // Add new images to existing ones
       }
 
       const updatedProduct = await existingProduct.save();
@@ -240,6 +247,63 @@ productRouter.put(
     }
   })
 );
+
+// productRouter.put(
+//   '/:id',
+//   isAuth,
+//   isAdmin,
+//   upload.single('ProductImage'),
+//   expressAsyncHandler(async (req, res) => {
+//     console.log(req)
+//     try {
+//       const productId = req.params.id;
+//       const existingProduct = await Product.findById(productId);
+
+//       if (!existingProduct) {
+//         return res.status(404).json({ message: 'Product not found' });
+//       }
+
+//       // Validate and update product properties
+//       if (req.body.title) {
+//         existingProduct.title = req.body.title;
+//       }
+//       if (!isNaN(req.body.price)) {
+//         existingProduct.price = req.body.price;
+//       }
+//       if (req.body.auther) {
+//         existingProduct.auther = req.body.auther;
+//       }
+//       if (!isNaN(req.body.countInStock)) {
+//         existingProduct.countInStock = req.body.countInStock;
+//       }
+//       if (req.body.description) {
+//         existingProduct.description = req.body.description;
+//       }
+//       if (req.body.genre) {
+//         existingProduct.genre = req.body.genre;
+//       }
+
+//       // Update the image if a new one was uploaded
+//        if (req.files && req.files.length > 0) {
+       
+//          existingProduct.images = req.files.map((file) => ({
+//            url: `${uniqueFilename}-${file.originalname}`,
+//            data: file.buffer, // Binary image data
+//            contentType: file.mimetype, // Image MIME type
+//            originalname: file.originalname, // Original filename
+//          }));
+//        }
+
+//       const updatedProduct = await existingProduct.save();
+//       res.json(updatedProduct);
+//     } catch (error) {
+//       console.log(error)
+//       res
+//         .status(400)
+//         .json({ message: 'Error updating product', error: error.message });
+//     }
+//   })
+// );
 
 
 

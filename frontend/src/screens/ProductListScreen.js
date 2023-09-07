@@ -201,7 +201,7 @@ console.log(products)
                   <td>{product.countInStock}</td>
                   <td>
                     <img
-                      style={{ height: 90, weidth: 90 }}
+                      style={{ height: 90, width: 90 }}
 
                       src={`/images/${product.images[0].url}`}
                     

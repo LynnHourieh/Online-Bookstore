@@ -35,7 +35,7 @@ function PlaceOrderScreen() {
   });
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const { cart, userInfo } = state;
-  console.log(cart);
+  //console.log(cart);
   const { cartItems, shippingAddress,paymentMethod } = cart;
   const total = cartItems.reduce((a, c) => a + c.price * c.quantity, 0)/100;
   const subtotal = cartItems.reduce((a, c) => a + c.quantity, 0);
@@ -117,7 +117,7 @@ function PlaceOrderScreen() {
                           >
                             {' '}
                             <img
-                              src={`/images/${item.image}`}
+                              src={`/images/${item.images[0].url}`}
                               alt={item.title}
                               className="img-fluid rounded img-thumbnail"
                               style={{ height: 200 }}

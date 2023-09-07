@@ -21,4 +21,5 @@ const productSchema = new mongoose.Schema(
 );
 //create model based on this schema:
 const Product = mongoose.model("Product", productSchema);
-export default Product;
+const Images=mongoose.model("Images",imageSchema);
+export default {Product,Images};
