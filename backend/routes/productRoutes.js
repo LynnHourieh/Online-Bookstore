@@ -3,18 +3,19 @@ import Product from "../Models/productModel.js";
 import expressAsyncHandler from "express-async-handler";
 import { isAdmin,isAuth } from "../utils.js";
 import multer from "multer";
+import { v4 as uuidv4 } from 'uuid';
 
-
-
+const uniqueFilename = `${Date.now()}-${uuidv4()}`;
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     callback(null, "../frontend/public/images/");
   },
   filename: (req, file, callback) => {
-    
-    callback(null, file.originalname);
+     const filename = `${uniqueFilename}-${file.originalname}`;
+     callback(null, filename);
   },
 });
+//const storage = multer.memoryStorage(); // Store images in memory
 const upload = multer({ storage: storage });
 
 const productRouter = express.Router();
@@ -60,11 +61,22 @@ productRouter.post(
   "/",
   isAuth,
   isAdmin,
-  upload.single("ProductImage"),
+  // upload.single("ProductImage"),
+  upload.array("ProductImage",4),
   expressAsyncHandler(async (req, res) => {
     try {
+      const images = req.files.map((file) => ({
+        url: `${uniqueFilename}-${file.originalname}`,
+
+        data: file.buffer, // Binary image data
+        contentType: file.mimetype, // Image MIME type
+        originalname: file.originalname, // Original filename
+      }));
+
       const NewProduct = new Product({
-        image: req.file.originalname,
+        // image: req.file.originalname,
+        
+        images:images,
         title: req.body.title,
         price: req.body.price,
         auther: req.body.auther, 

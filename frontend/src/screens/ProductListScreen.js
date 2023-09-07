@@ -88,7 +88,7 @@ export default function ProductListScreen() {
 
   const { state } = useContext(Store);
   const { userInfo } = state;
-
+console.log(products)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -202,8 +202,10 @@ export default function ProductListScreen() {
                   <td>
                     <img
                       style={{ height: 90, weidth: 90 }}
-                      src={`/images/${product.image}`}
-                    />
+
+                      src={`/images/${product.images[0].url}`}
+                    
+                    />  {console.log(product.images[0].url)}
                   </td>
                   <td>
                     <Button

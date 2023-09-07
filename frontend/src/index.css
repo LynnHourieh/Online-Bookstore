@@ -21,3 +21,16 @@
   max-width: 600px;
 }
 
+.enlarge-on-hover {
+ 
+  transition: transform 0.3s ease-in-out; /* Add a smooth transition */
+}
+
+/* Apply the scaling transform on hover */
+.enlarge-on-hover:hover {
+
+  transform: scale(3.2); /* Increase the scale to enlarge the image */
+}
+.card-index{
+  z-index:-1
+}

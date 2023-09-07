@@ -52,7 +52,7 @@ function ProductScreen() {
   //to take title from url use useParams();
   const params = useParams();
   const { _id } = params;
-console.log(product)
+  //console.log(product);
   useEffect(() => {
     const fetchData = async () => {
       dispatch({ type: 'FETCH_REQUEST' });
@@ -133,12 +133,16 @@ console.log(product)
     <div>
       <Row>
         <Col md={6}>
-          <img
-            className="img-large"
-            src={`/images/${product.image}`}
-            alt={product.name}
-            style={{ height: 400, weight: 400 }}
-          />
+          {loading ? (
+            <LoadingBox />
+          ) : (
+            <img
+              className="img-large"
+              src={`/images/${product.images[0].url}`}
+              alt={product.name}
+              style={{ height: 300, weight: 300 }}
+            />
+          )}
         </Col>
         <Col md={5}>
           <ListGroup variant="flush">
@@ -157,9 +161,35 @@ console.log(product)
               Description:
               <p>{product.description}</p>
             </ListGroup>
+            <ListGroup.Item>
+              {loading ? (
+                <LoadingBox />
+              ) : (
+                <Row xs={1} md={2} lg={3} className="g-2">
+                  {[...product.images].map((x) => (
+                    <Col key={x._id}>
+                      <Card>
+                        <Button
+                          className="thumbnail"
+                          type="button"
+                          variant="light"
+                        >
+                          <Card.Img
+                            variant="top"
+                            className="enlarge-on-hover"
+                            src={`/images/${x.url}`}
+                            alt="product"
+                          />
+                        </Button>
+                      </Card>
+                    </Col>
+                  ))}
+                </Row>
+              )}
+            </ListGroup.Item>
           </ListGroup>
 
-          <Card>
+          <Card className="card-index">
             <Card.Body>
               <ListGroup variant="flush">
                 <ListGroup.Item>
@@ -178,7 +208,9 @@ console.log(product)
                         <Badge bg="danger">Unavailable</Badge>
                       )}
                       {product.countInStock < 5 ? (
-                        <p style={{color:"red"}}>Low stock: only {product.countInStock} left</p>
+                        <p style={{ color: 'red' }}>
+                          Low stock: only {product.countInStock} left
+                        </p>
                       ) : (
                         ''
                       )}

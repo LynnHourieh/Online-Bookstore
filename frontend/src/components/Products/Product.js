@@ -48,7 +48,7 @@ function Product({ product }) {
       <Link to={`/product/${product._id}`}>
         {" "}
         <img
-          src={`/images/${product.image}`}
+          src={`/images/${product.images[0].url}`}
           className="card-img-top product-img"
         />
       </Link>
