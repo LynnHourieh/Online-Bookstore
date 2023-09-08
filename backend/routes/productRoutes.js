@@ -1,9 +1,11 @@
 import express from "express";
-import Product from "../Models/productModel.js";
+// import Product from "../Models/productModel.js";
 import expressAsyncHandler from "express-async-handler";
 import { isAdmin,isAuth } from "../utils.js";
 import multer from "multer";
 import { v4 as uuidv4 } from 'uuid';
+import models from "../Models/productModel.js"
+const {Product}=models
 
 const uniqueFilename = `${Date.now()}-${uuidv4()}`;
 const storage = multer.diskStorage({
