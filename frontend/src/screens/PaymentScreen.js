@@ -5,6 +5,7 @@ import { useContext, useState } from 'react';
 import CheckoutSteps from '../components/Checkout/CheckoutSteps';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/esm/Button';
+
 //to test it use cart 42424242424242424
 function PaymentScreen() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ function PaymentScreen() {
     cart: { shippingAddress, cartItems, paymentMethod },
   } = state;
   const [paymentMethodName, setPaymentMethod] = useState('');
-  console.log(paymentMethod);
+  //console.log(paymentMethod);
   //console.log(cartItems)
   const paymentFunctionUsingStripe = () => {
     fetch('/api/stripe/create-checkout-session', {
@@ -43,16 +44,22 @@ function PaymentScreen() {
         console.error(e.error);
       });
   };
-  const paymentFunctionUsingPayPal = () => {
-    return;
-  };
+
   const submitHandler = () => {
     if (paymentMethodName == 'Stripe') {
       paymentFunctionUsingStripe();
-    } else if (paymentMethodName == 'PayPal') {
-      paymentFunctionUsingPayPal();
+    } else if (paymentMethodName == 'CashOnDelivery') {
+      setPaymentMethod('CashOnDelivery');
+        ctxDispatch({
+          type: 'SAVE_PAYMENT_METHOD',
+          payload: paymentMethodName,
+        });
+        localStorage.setItem('paymentMethod', paymentMethodName);
+        navigate('/placeorder');
+
+    } else {
+      console.log('error');
     }
-    else { console.log("error")}
   };
   return (
     <div>
@@ -63,10 +70,11 @@ function PaymentScreen() {
           <div className="mb-3">
             <Form.Check
               type="radio"
-              id="PayPal"
-              label="PayPal"
-              value="PayPal"
-              checked={paymentMethodName === 'PayPal'}
+              id="CashOnDelivery"
+              label="CashOnDelivery"
+              value="CashOnDelivery"
+              checked={paymentMethodName === 'CashOnDelivery'}
+              onChange={(e) => setPaymentMethod(e.target.value)}
             />
           </div>
           <div className="mb-3">
