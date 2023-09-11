@@ -32,6 +32,28 @@ productRouter.get("/", async (req, res) => {
       .json({ message: "Error retrieving products", error: error.message });
   }
 });
+// productRouter.get('/', async (req, res) => {
+//   try {
+//     const productCounts = await Product.aggregate([
+//       {
+//         $group: {
+//           _id: '$category_id', // Group by category_id
+//           count: { $sum: 1 }, // Count the number of products in each category
+//         },
+//       },
+//     ]);
+
+//     res.status(200).json(productCounts);
+//   } catch (error) {
+//     res
+//       .status(500)
+//       .json({
+//         message: 'Error retrieving product counts',
+//         error: error.message,
+//       });
+//   }
+// });
+
 
 
 

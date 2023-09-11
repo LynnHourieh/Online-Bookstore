@@ -1,72 +1,104 @@
-import "./App.css";
-import Container from "react-bootstrap/Container";
-import Navbar from "react-bootstrap/Navbar";
-import HomeScreen from "./screens/HomeScreen";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import ProductScreen from "./screens/ProductScreen";
-import { useContext, useState, useEffect } from "react";
-import SearchBox from "./components/SearchBox";
-import { Store } from "./store";
-import Badge from "react-bootstrap/Badge";
-import Nav from "react-bootstrap/Nav";
-import { Link } from "react-router-dom";
-import CartScreen from "./screens/CartScreen";
-import SigninScreen from "./screens/SigninScreen";
-import SignupScreen from "./screens/SignupScreen";
-import { LinkContainer } from "react-router-bootstrap";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import ShippingAddressScreen from "./screens/ShippingAddressScreen";
-import PlaceOrderScreen from "./screens/PlaceOrderScreen";
-import OrderScreen from "./screens/OrderScreen";
-import OrderHistoryScreen from "./screens/OrderHistoryScreen";
-import ProfileScreen from "./screens/ProfileScreen";
-import WishListScreen from "./screens/WishListScreen";
-import SearchScreen from "./screens/SearchScreen";
-import ProtectedRoute from "./components/User/ProtectedRoute";
-import AdminRoute from "./components/Admin/AdminRoute";
-import DashboardScreen from "./screens/DashboardScreen";
-import ProductListScreen from "./screens/ProductListScreen";
-import ForgetPasswordScreen from "./screens/ForgetPasswordScreen";
-import ResetPasswordScreen from "./screens/ResetPasswordScreen";
-import UserListScreen from "./screens/UserListScreen";
-import UserEditScreen from "./screens/UserEditScreen";
-import OrderListScreen from "./screens/OrderListScreen";
-import PaymentScreen from "./screens/PaymentScreen";
-import ProductEditScreen from "./screens/ProductEditScreen";
+import './App.css';
+import Container from 'react-bootstrap/Container';
+import Navbar from 'react-bootstrap/Navbar';
+import HomeScreen from './screens/HomeScreen';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import ProductScreen from './screens/ProductScreen';
+import { useContext, useState, useEffect } from 'react';
+import SearchBox from './components/SearchBox';
+import { Store } from './store';
+import Badge from 'react-bootstrap/Badge';
+import Nav from 'react-bootstrap/Nav';
+import { Link } from 'react-router-dom';
+import CartScreen from './screens/CartScreen';
+import SigninScreen from './screens/SigninScreen';
+import SignupScreen from './screens/SignupScreen';
+import { LinkContainer } from 'react-router-bootstrap';
+import NavDropdown from 'react-bootstrap/NavDropdown';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ShippingAddressScreen from './screens/ShippingAddressScreen';
+import PlaceOrderScreen from './screens/PlaceOrderScreen';
+import OrderScreen from './screens/OrderScreen';
+import OrderHistoryScreen from './screens/OrderHistoryScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import WishListScreen from './screens/WishListScreen';
+import SearchScreen from './screens/SearchScreen';
+import ProtectedRoute from './components/User/ProtectedRoute';
+import AdminRoute from './components/Admin/AdminRoute';
+import DashboardScreen from './screens/DashboardScreen';
+import ProductListScreen from './screens/ProductListScreen';
+import ForgetPasswordScreen from './screens/ForgetPasswordScreen';
+import ResetPasswordScreen from './screens/ResetPasswordScreen';
+import UserListScreen from './screens/UserListScreen';
+import UserEditScreen from './screens/UserEditScreen';
+import OrderListScreen from './screens/OrderListScreen';
+import PaymentScreen from './screens/PaymentScreen';
+import ProductEditScreen from './screens/ProductEditScreen';
+import axios from "axios";
+import { getError } from './utlis';
+import { toast } from 'react-toastify';
+import CategoryListScreen from './screens/CategoryListScreen';
 
 function App() {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const navigate = useNavigate();
-  const { cart, userInfo, productInfo,wishlist } = state;
+  const { cart, userInfo, productInfo, wishlist } = state;
   const { products } = productInfo;
-//console.log(wishlist.wishlistItems)
+  //console.log(wishlist.wishlistItems)
   const signoutHandler = () => {
-    ctxDispatch({ type: "USER_SIGNOUT" });
-    localStorage.removeItem("userInfo");
-    localStorage.removeItem("shippingAddress");
-    localStorage.removeItem("cartItems");
-    localStorage.removeItem("wishlistItems");
-    window.location.href = "/signin";
+    ctxDispatch({ type: 'USER_SIGNOUT' });
+    localStorage.removeItem('userInfo');
+    localStorage.removeItem('shippingAddress');
+    localStorage.removeItem('cartItems');
+    localStorage.removeItem('wishlistItems');
+    window.location.href = '/signin';
   };
+  const [sidebarIsOpen, setSidebarIsOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data } = await axios.get(`/api/category`);
+        setCategories(data);
+      } catch (err) {
+        toast.error(getError(err));
+      }
+    };
+    fetchCategories();
+  }, []);
 
   return (
-    <div>
+    <div
+      className={
+        sidebarIsOpen
+          ? 'd-flex flex-column site-container active-cont'
+          : 'd-flex flex-column site-container'
+      }
+    >
+      {' '}
       <ToastContainer position="bottom-center" limit={1} />
       <Navbar bg="light" variant="light">
         <Container>
+          <i
+            className="fas fa-bars"
+            style={{ padding: 10, fontSize: 22, cursor: 'pointer' }}
+            onClick={() => setSidebarIsOpen(!sidebarIsOpen)}
+          ></i>
+
           <LinkContainer to="/">
             <Navbar.Brand>
+              BookStore{' '}
               <i
                 class="bi bi-book"
                 style={{
                   fontSize: '25px',
                 }}
               ></i>{' '}
-              BookStore{' '}
             </Navbar.Brand>
           </LinkContainer>
+
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <SearchBox />
@@ -100,6 +132,7 @@ function App() {
                 </Badge>
               )}
             </Link>
+
             {userInfo ? (
               <NavDropdown title={userInfo.name} id="basic-nav-dropdown">
                 <LinkContainer to="/profile">
@@ -128,6 +161,10 @@ function App() {
                   <NavDropdown.Item>Dashboard</NavDropdown.Item>
                 </LinkContainer>
                 <NavDropdown.Divider />
+                <LinkContainer to="/admin/category">
+                  <NavDropdown.Item>Category</NavDropdown.Item>
+                </LinkContainer>
+                <NavDropdown.Divider />
                 <LinkContainer to="/admin/products">
                   <NavDropdown.Item>Products</NavDropdown.Item>
                 </LinkContainer>
@@ -144,7 +181,29 @@ function App() {
           </Nav>
         </Container>
       </Navbar>
-      <div></div>
+      <div
+        className={
+          sidebarIsOpen
+            ? 'active-nav side-navbar d-flex justify-content-between flex-wrap flex-column'
+            : 'side-navbar d-flex justify-content-between flex-wrap flex-column'
+        }
+      >
+        <Nav className="flex-column text-white w-100 p-2">
+          <Nav.Item>
+            <strong>Categories</strong>
+          </Nav.Item>
+          {categories?.map((category) => (
+            <Nav.Item key={category._id}>
+              <LinkContainer
+                to={{ pathname: '/search/', search: `query=${category.title}` }}
+                onClick={() => setSidebarIsOpen(false)}
+              >
+                <Nav.Link>{category.title}</Nav.Link>
+              </LinkContainer>
+            </Nav.Item>
+          ))}
+        </Nav>
+      </div>
       <main>
         <Container>
           <Routes>
@@ -197,6 +256,14 @@ function App() {
               }
             />
             <Route
+              path="/admin/category"
+              element={
+                <AdminRoute>
+                  <CategoryListScreen />
+                </AdminRoute>
+              }
+            />
+            <Route
               path="/admin/users"
               element={
                 <AdminRoute>
@@ -232,7 +299,7 @@ function App() {
               path="/admin/product/:id"
               element={
                 <AdminRoute>
-                  <ProductEditScreen/>
+                  <ProductEditScreen />
                 </AdminRoute>
               }
             ></Route>

@@ -1,16 +1,12 @@
 import React, { useEffect, useReducer, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import { getError } from '../utlis';
-
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import LoadingBox from '../components/Loading/Loading';
 import MessageBox from '../components/Message/Message';
-import Button from 'react-bootstrap/Button';
 import Product from '../components/Products/Product';
-import LinkContainer from 'react-router-bootstrap/LinkContainer';
 
 const reducer = (state, action) => {
   switch (action.type) {
