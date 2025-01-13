@@ -4,7 +4,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import axios from "axios";
 import { Store } from "../../store";
-
+import "./Product.css"
 
 function Product({ product }) {
   const { state, dispatch: ctxDispatch } = useContext(Store);
@@ -44,7 +44,7 @@ function Product({ product }) {
 //console.log(feedback)
 
   return (
-    <Card style={{ height: 520 }}>
+    <Card>
       <Link to={`/product/${product._id}`}>
         {" "}
         <img
@@ -52,7 +52,7 @@ function Product({ product }) {
           className="card-img-top product-img"
         />
       </Link>
-      <Card.Body className="card-body">
+      <Card.Body >
         <Link
           to={`/product/${product._id}`}
           style={{ color: "black", textDecoration: "none" }}
@@ -60,14 +60,12 @@ function Product({ product }) {
           {/* Go to ProductScreen Component */}
           <Card.Title>{product.title}</Card.Title>
         </Link>
-
-
-
-        <Card.Text>{product.price/100} $</Card.Text>
+        
+        <Card.Text>{product.price} $</Card.Text>
         <Card.Text>By: {product.auther}</Card.Text>
         <Card.Text>
-          <div style={{ display: "flex", justifyContent: "space-around" }}>
-            <Card.Text style={{ marginTop: 10 }}>
+          <div className="card-details">
+            <Card.Text >
               {" "}
               {product.countInStock === 0 ? (
                 <Button variant="light" disabled>
@@ -87,13 +85,14 @@ function Product({ product }) {
                 <Button
                   variant="link"
                   onClick={() => removeItemHandler(product)}
+                  className="card-icon"
                 >
                   <i
                     class="bi bi-heart-fill"
                     style={{
                       fontSize: "28px",
                       color: "red",
-                      marginBottom: "10px",
+                     
                     }}
                   ></i>
                 </Button>
@@ -101,6 +100,7 @@ function Product({ product }) {
                 <Button
                   variant="link"
                   onClick={() => addToWishlistHandler(product)}
+                    className="card-icon"
                 >
                   {" "}
                   <i
@@ -108,7 +108,7 @@ function Product({ product }) {
                     style={{
                       fontSize: "28px",
                       color: "gray",
-                      marginBottom: "10px",
+                     
                     }}
                   ></i>
                 </Button>

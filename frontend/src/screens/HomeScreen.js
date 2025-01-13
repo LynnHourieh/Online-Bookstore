@@ -30,7 +30,7 @@ function HomeScreen() {
   return (
     <div>
       
-      <h1>Featured Books</h1>
+     
       
       <div className="products">
         {loading ? (
@@ -40,7 +40,7 @@ function HomeScreen() {
         ) : (
           <Row>
             {products.map((product) => (
-              <Col sm={6} md={4} lg={3} className="mb-3" key={product._id}>
+              <Col sm={6} md={4} lg={3}  key={product._id} className='products-column'>
                 <Product product={product} />
               </Col>
             ))}

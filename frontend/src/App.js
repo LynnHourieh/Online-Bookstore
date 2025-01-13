@@ -7,7 +7,6 @@ import ProductScreen from './screens/ProductScreen';
 import { useContext, useState, useEffect } from 'react';
 import SearchBox from './components/SearchBox';
 import { Store } from './store';
-import Badge from 'react-bootstrap/Badge';
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
 import CartScreen from './screens/CartScreen';
@@ -35,7 +34,7 @@ import UserEditScreen from './screens/UserEditScreen';
 import OrderListScreen from './screens/OrderListScreen';
 import PaymentScreen from './screens/PaymentScreen';
 import ProductEditScreen from './screens/ProductEditScreen';
-import axios from "axios";
+import axios from 'axios';
 import { getError } from './utlis';
 import { toast } from 'react-toastify';
 import CategoryListScreen from './screens/CategoryListScreen';
@@ -88,15 +87,7 @@ function App() {
           ></i>
 
           <LinkContainer to="/">
-            <Navbar.Brand>
-              BookStore{' '}
-              <i
-                class="bi bi-book"
-                style={{
-                  fontSize: '25px',
-                }}
-              ></i>{' '}
-            </Navbar.Brand>
+            <Navbar.Brand>BookStore </Navbar.Brand>
           </LinkContainer>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -106,31 +97,32 @@ function App() {
 
           <Nav className="me-auto">
             <Link className="nav-link" to="/wishlist">
-              <i
-                class="bi bi-heart-fill"
-                style={{
-                  fontSize: '25px',
-                  color: 'red',
-                }}
-              ></i>
-              {wishlist.wishlistItems.length > 0 && (
-                <Badge pill bg="primary">
-                  {wishlist.wishlistItems.length}
-                </Badge>
-              )}{' '}
+              <div class="position-relative">
+                <i
+                  class="bi bi-heart-fill"
+                  style={{ fontSize: '25px', color: 'red' }}
+                ></i>
+                {wishlist.wishlistItems.length > 0 && (
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                    {wishlist.wishlistItems.length}
+                  </span>
+                )}
+              </div>
             </Link>
             <Link to="/cart" className="nav-link">
-              <i
-                class="bi bi-cart"
-                style={{
-                  fontSize: '25px',
-                }}
-              ></i>
-              {cart.cartItems.length > 0 && (
-                <Badge pill bg="primary">
-                  {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
-                </Badge>
-              )}
+              <div class="position-relative">
+                <i
+                  class="bi bi-cart"
+                  style={{
+                    fontSize: '25px',
+                  }}
+                ></i>
+                {cart.cartItems.length > 0 && (
+                  <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                    {cart.cartItems.reduce((a, c) => a + c.quantity, 0)}
+                  </span>
+                )}
+              </div>
             </Link>
 
             {userInfo ? (
@@ -188,9 +180,9 @@ function App() {
             : 'side-navbar d-flex justify-content-between flex-wrap flex-column'
         }
       >
-        <Nav className="flex-column text-white w-100 p-2">
+        <Nav className="flex-column  w-100 p-2">
           <Nav.Item>
-            <strong>Categories</strong>
+            <div className='sidebar-title'>Categories</div>
           </Nav.Item>
           {categories?.map((category) => (
             <Nav.Item key={category._id}>

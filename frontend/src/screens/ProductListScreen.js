@@ -159,7 +159,7 @@ console.log(products)
         <Col className="col text-end">
           <div>
             <Button type="button" onClick={openPopup}>
-              Create Product
+              Add New Product
             </Button>
             <ProductPopup
               isOpen={isPopupOpen}
@@ -197,7 +197,7 @@ console.log(products)
                   <td>{product._id}</td>
                   <td>{product.title}</td>
                   <td>{product.auther}</td> <td>{product.genre}</td>
-                  <td>{product.price / 1000}$</td>
+                  <td>{product.price}$</td>
                   <td>{product.countInStock}</td>
                   <td>
                     <img
